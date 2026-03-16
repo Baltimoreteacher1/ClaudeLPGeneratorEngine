@@ -14,31 +14,111 @@
 </noscript>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
   :root {
-    --navy:#1C2E42; --teal:#387F84; --cream:#F7F4EE; --body:#242A30;
-    --muted:#5C656E; --border:#D6DBDF; --card-blue:#EAF2F7;
-    --success:#2d9b6f; --error:#C0614A; --warn:#b87d2a;
+    --navy:    #1C2E42;
+    --teal:    #387F84;
+    --cream:   #F7F4EE;
+    --body:    #242A30;
+    --muted:   #5C656E;
+    --border:  #D6DBDF;
+    --card-blue: #EAF2F7;
+    --success: #2d9b6f;
+    --error:   #C0614A;
+    --warn:    #b87d2a;
   }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Space Grotesk', sans-serif; background: var(--cream); color: var(--body); min-height: 100vh; display: flex; flex-direction: column; }
-  header { position: sticky; top: 0; z-index: 100; background: var(--navy); color: white; padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--teal); box-shadow: 0 2px 12px rgba(0,0,0,0.25); }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--cream);
+    color: var(--body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--navy);
+    color: white;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--teal);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
   .logo { display: flex; align-items: center; gap: 12px; }
-  .logo-mark { width: 36px; height: 36px; background: var(--teal); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; }
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: var(--teal);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: white;
+    flex-shrink: 0;
+  }
   .logo-text { font-size: 16px; font-weight: 600; letter-spacing: 0.02em; }
   .logo-sub  { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 400; }
-  .badge { background: rgba(56,127,132,0.25); border: 1px solid var(--teal); color: var(--teal); font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 4px 10px; border-radius: 4px; white-space: nowrap; }
-  main { flex: 1; max-width: 820px; margin: 0 auto; width: 100%; padding: 36px 24px; }
+  .badge {
+    background: rgba(56,127,132,0.25);
+    border: 1px solid var(--teal);
+    color: var(--teal);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  main {
+    flex: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 36px 24px;
+  }
   .page-title { font-size: 26px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
   .page-sub   { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
-  .card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
   .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
-  .step-num { width: 28px; height: 28px; background: var(--navy); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; transition: background 0.2s; }
+  .step-num {
+    width: 28px; height: 28px;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
   .step-num.done { background: var(--success); }
   .card-title { font-size: 15px; font-weight: 600; color: var(--navy); }
   .card-hint  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
   .field-error { font-size: 12px; color: var(--error); margin-top: 5px; display: none; }
   .field-error.visible { display: block; }
-  .drop-zone { border: 2px dashed var(--border); border-radius: 8px; padding: 32px 20px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; background: var(--cream); }
+  input.invalid { border-color: var(--error) !important; box-shadow: 0 0 0 3px rgba(192,97,74,0.12) !important; }
+
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: var(--cream);
+  }
   .drop-zone:hover, .drop-zone.drag-over { border-color: var(--teal); background: #EAF5F6; }
   .drop-zone:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
   .drop-icon { font-size: 32px; margin-bottom: 10px; }
@@ -49,15 +129,28 @@
   .file-remove { background: none; border: 1px solid transparent; cursor: pointer; color: var(--muted); font-size: 16px; padding: 2px 6px; border-radius: 4px; line-height: 1; }
   .file-remove:hover { color: var(--error); border-color: var(--error); }
   #file-input { display: none; }
+
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
   .field-row.full { grid-template-columns: 1fr; }
+
   label { font-size: 12px; font-weight: 600; color: var(--navy); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px; }
-  input[type="text"], input[type="password"], input[type="date"] { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 14px; color: var(--body); background: white; transition: border-color 0.2s, box-shadow 0.2s; outline: none; }
+  input[type="text"], input[type="password"], input[type="date"] {
+    width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px;
+    font-family: inherit; font-size: 14px; color: var(--body); background: white;
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+  }
   input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(56,127,132,0.1); }
+
   .api-key-wrap { position: relative; }
   .api-key-wrap input { padding-right: 80px; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
-  .toggle-key { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: 1px solid var(--border); border-radius: 4px; font-size: 11px; color: var(--muted); cursor: pointer; padding: 3px 8px; font-family: inherit; transition: border-color 0.15s, color 0.15s; }
+  .toggle-key {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    background: none; border: 1px solid var(--border); border-radius: 4px;
+    font-size: 11px; color: var(--muted); cursor: pointer; padding: 3px 8px;
+    font-family: inherit; transition: border-color 0.15s, color 0.15s;
+  }
   .toggle-key:hover { border-color: var(--teal); color: var(--teal); }
+
   .radio-group { display: flex; gap: 10px; }
   .radio-option { flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 12px; cursor: pointer; transition: border-color 0.15s, background 0.15s; position: relative; }
   .radio-option:hover { border-color: var(--teal); }
@@ -65,10 +158,17 @@
   .radio-option input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
   .ro-label { font-size: 13px; font-weight: 600; color: var(--navy); }
   .ro-desc  { font-size: 11px; color: var(--muted); margin-top: 3px; }
-  .generate-btn { width: 100%; padding: 16px; background: var(--navy); color: white; border: none; border-radius: 10px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; }
+
+  .generate-btn {
+    width: 100%; padding: 16px; background: var(--navy); color: white; border: none;
+    border-radius: 10px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px;
+  }
   .generate-btn:hover:not(:disabled) { background: #263f59; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(28,46,66,0.25); }
   .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
   .generate-btn:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+
   #progress-section { display: none; }
   .progress-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
   .progress-title { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 16px; }
@@ -84,12 +184,18 @@
   .stage-name { flex: 1; color: var(--body); }
   .stage-name.muted { color: var(--muted); }
   .stage-detail { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--muted); }
+
   .progress-bar-wrap { height: 6px; background: var(--border); border-radius: 3px; margin: 16px 0 8px; overflow: hidden; }
   .progress-bar { height: 100%; background: var(--teal); border-radius: 3px; transition: width 0.4s ease; width: 0%; }
   .progress-label { font-size: 12px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
   .log-wrap { margin-top: 12px; background: #0d1117; border-radius: 8px; padding: 14px; max-height: 200px; overflow-y: auto; }
   .log-line { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8b949e; line-height: 1.7; }
-  .log-line.info { color: #58a6ff; } .log-line.ok { color: #3fb950; } .log-line.warn { color: #d29922; } .log-line.err { color: #f85149; }
+  .log-line.info { color: #58a6ff; }
+  .log-line.ok   { color: #3fb950; }
+  .log-line.warn { color: #d29922; }
+  .log-line.err  { color: #f85149; }
+
   #results-section { display: none; }
   .results-card { background: white; border: 2px solid var(--success); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
   .results-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
@@ -104,34 +210,43 @@
   .dl-size { font-size: 11px; color: var(--muted); margin-top: 2px; }
   .dl-btn { padding: 8px 18px; background: var(--navy); color: white; border: none; border-radius: 6px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background 0.15s; white-space: nowrap; }
   .dl-btn:hover { background: #263f59; }
+
   .reset-btn { width: 100%; padding: 12px; background: none; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 14px; color: var(--muted); cursor: pointer; margin-top: 4px; transition: border-color 0.15s, color 0.15s; }
   .reset-btn:hover { border-color: var(--navy); color: var(--navy); }
+
   #error-section { display: none; background: #fdf2f0; border: 1px solid #e8bcb3; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
   .err-title { font-weight: 700; color: var(--error); margin-bottom: 8px; }
   .err-body  { font-size: 13px; color: var(--body); line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
   .err-retry { margin-top: 12px; padding: 8px 16px; background: var(--error); color: white; border: none; border-radius: 6px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
   .err-retry:hover { opacity: 0.88; }
+
   .info-box { background: var(--card-blue); border: 1px solid #b8d4e3; border-radius: 8px; padding: 12px 16px; font-size: 12px; color: var(--navy); line-height: 1.6; margin-top: 12px; }
   .info-box strong { color: var(--teal); }
+
   footer { text-align: center; padding: 16px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); }
   footer kbd { font-family: 'JetBrains Mono', monospace; background: #e8edf3; border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; font-size: 10px; }
+
   @media (max-width: 520px) {
-    header { padding: 14px 16px; } main { padding: 24px 16px; }
-    .field-row { grid-template-columns: 1fr; } .radio-group { flex-direction: column; }
+    header { padding: 14px 16px; }
+    main   { padding: 24px 16px; }
+    .field-row { grid-template-columns: 1fr; }
+    .radio-group { flex-direction: column; }
     .download-item { flex-direction: column; align-items: flex-start; gap: 10px; }
     .dl-btn { width: 100%; text-align: center; }
   }
+
   @media (prefers-color-scheme: dark) {
     :root { --cream: #161b22; --body: #c9d1d9; --muted: #8b949e; --border: #30363d; --card-blue: #1a2332; }
     body { background: var(--cream); }
     .card, .progress-card, .results-card, .download-item { background: #0d1117; }
     input[type="text"], input[type="password"], input[type="date"] { background: #0d1117; color: var(--body); border-color: var(--border); }
-    .drop-zone { background: #161b22; } .drop-zone:hover, .drop-zone.drag-over { background: #1a2d2e; }
+    .drop-zone { background: #161b22; }
+    .drop-zone:hover, .drop-zone.drag-over { background: #1a2d2e; }
     #error-section { background: #1e0e0c; border-color: #5a2a22; }
     .info-box { background: #1a2332; border-color: #2a4060; }
-    .page-title, .card-title, .results-title { color: #e6edf3; } .ro-label { color: #e6edf3; }
+    .page-title, .card-title, .results-title { color: #e6edf3; }
+    .ro-label { color: #e6edf3; }
   }
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
 </style>
 </head>
 <body>
@@ -144,7 +259,7 @@
       <div class="logo-sub">Neft.Alba · BCPS Grade 6 Math</div>
     </div>
   </div>
-  <div class="badge" aria-label="LP Engine version 2.2">LP ENGINE v2.2</div>
+  <div class="badge" aria-label="LP Engine version 2.1">LP ENGINE v2.1</div>
 </header>
 
 <main>
@@ -154,12 +269,20 @@
   <div class="card" id="step1-card">
     <div class="card-header">
       <div class="step-num" id="step1-num" aria-label="Step 1">1</div>
-      <div><div class="card-title">Upload Lesson Slides</div><div class="card-hint">Reveal Math PPTX with speaker notes, scenarios, and objectives</div></div>
+      <div>
+        <div class="card-title">Upload Lesson Slides</div>
+        <div class="card-hint">Reveal Math PPTX with speaker notes, scenarios, and objectives</div>
+      </div>
     </div>
-    <div class="drop-zone" id="drop-zone" role="button" tabindex="0"
+    <div
+      class="drop-zone"
+      id="drop-zone"
+      role="button"
+      tabindex="0"
       aria-label="Upload PPTX file. Click or drag and drop."
       onclick="document.getElementById('file-input').click()"
-      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('file-input').click();}">
+      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('file-input').click();}"
+    >
       <div class="drop-icon" aria-hidden="true">📊</div>
       <div class="drop-text"><strong>Click to select</strong> or drag &amp; drop your PPTX</div>
       <div class="drop-text" style="margin-top:6px;font-size:12px;">.pptx files only · Max 50MB</div>
@@ -171,11 +294,20 @@
   <div class="card">
     <div class="card-header">
       <div class="step-num" aria-label="Step 2">2</div>
-      <div><div class="card-title">Session Details</div><div class="card-hint">Date and format for both lesson plans</div></div>
+      <div>
+        <div class="card-title">Session Details</div>
+        <div class="card-hint">Date and format for both lesson plans</div>
+      </div>
     </div>
     <div class="field-row">
-      <div><label for="lesson-date">Lesson Date</label><input type="date" id="lesson-date" /></div>
-      <div><label for="unit-lesson">Unit / Lesson</label><input type="text" id="unit-lesson" placeholder="e.g. Unit 7 Lesson 2" /></div>
+      <div>
+        <label for="lesson-date">Lesson Date</label>
+        <input type="date" id="lesson-date" />
+      </div>
+      <div>
+        <label for="unit-lesson">Unit / Lesson</label>
+        <input type="text" id="unit-lesson" placeholder="e.g. Unit 7 Lesson 2" />
+      </div>
     </div>
     <div class="field-row full">
       <fieldset style="border:none;padding:0;">
@@ -183,11 +315,13 @@
         <div class="radio-group" role="radiogroup" aria-label="Block length">
           <label class="radio-option selected" id="opt-90">
             <input type="radio" name="block" value="90" checked onchange="selectBlock('90')">
-            <div class="ro-label">90 min</div><div class="ro-desc">8 phases · full block</div>
+            <div class="ro-label">90 min</div>
+            <div class="ro-desc">8 phases · full block</div>
           </label>
           <label class="radio-option" id="opt-45">
             <input type="radio" name="block" value="45" onchange="selectBlock('45')">
-            <div class="ro-label">45 min</div><div class="ro-desc">5 phases · compressed</div>
+            <div class="ro-label">45 min</div>
+            <div class="ro-desc">5 phases · compressed</div>
           </label>
         </div>
       </fieldset>
@@ -197,14 +331,19 @@
   <div class="card">
     <div class="card-header">
       <div class="step-num" aria-label="Step 3">3</div>
-      <div><div class="card-title">Anthropic API Key</div><div class="card-hint">Stored locally in your browser — never transmitted elsewhere</div></div>
+      <div>
+        <div class="card-title">Anthropic API Key</div>
+        <div class="card-hint">Stored locally in your browser — never transmitted elsewhere</div>
+      </div>
     </div>
     <div class="api-key-wrap">
       <input type="password" id="api-key" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false" aria-label="Anthropic API key" />
       <button class="toggle-key" id="toggle-key-btn" onclick="toggleKey()" aria-label="Show API key" aria-pressed="false">show</button>
     </div>
     <div class="field-error" id="err-key" role="alert">Please enter a valid Anthropic API key (starts with sk-ant-).</div>
-    <div class="info-box"><strong>Privacy:</strong> Your key is saved in this browser's localStorage and sent only to <code>api.anthropic.com/v1/messages</code> to process your slides.</div>
+    <div class="info-box">
+      <strong>Privacy:</strong> Your key is saved in this browser's localStorage and sent only to <code>api.anthropic.com/v1/messages</code> to process your slides. This file runs entirely locally — no server involved.
+    </div>
   </div>
 
   <button class="generate-btn" id="generate-btn" onclick="startGeneration()" aria-label="Generate lesson plans">
@@ -219,10 +358,26 @@
       </div>
       <div class="progress-label" id="progress-label">0 / 4 stages</div>
       <ul class="stage-list">
-        <li class="stage-item"><div class="stage-icon waiting" id="icon-extract" aria-hidden="true">○</div><div class="stage-name muted" id="name-extract">Extracting slide content</div><div class="stage-detail" id="detail-extract"></div></li>
-        <li class="stage-item"><div class="stage-icon waiting" id="icon-s1" aria-hidden="true">○</div><div class="stage-name muted" id="name-s1">Building Session 1 lesson plan</div><div class="stage-detail" id="detail-s1"></div></li>
-        <li class="stage-item"><div class="stage-icon waiting" id="icon-s2" aria-hidden="true">○</div><div class="stage-name muted" id="name-s2">Building Session 2 lesson plan</div><div class="stage-detail" id="detail-s2"></div></li>
-        <li class="stage-item"><div class="stage-icon waiting" id="icon-docx" aria-hidden="true">○</div><div class="stage-name muted" id="name-docx">Compiling .docx files</div><div class="stage-detail" id="detail-docx"></div></li>
+        <li class="stage-item">
+          <div class="stage-icon waiting" id="icon-extract" aria-hidden="true">○</div>
+          <div class="stage-name muted" id="name-extract">Extracting slide content</div>
+          <div class="stage-detail" id="detail-extract"></div>
+        </li>
+        <li class="stage-item">
+          <div class="stage-icon waiting" id="icon-s1" aria-hidden="true">○</div>
+          <div class="stage-name muted" id="name-s1">Building Session 1 lesson plan</div>
+          <div class="stage-detail" id="detail-s1"></div>
+        </li>
+        <li class="stage-item">
+          <div class="stage-icon waiting" id="icon-s2" aria-hidden="true">○</div>
+          <div class="stage-name muted" id="name-s2">Building Session 2 lesson plan</div>
+          <div class="stage-detail" id="detail-s2"></div>
+        </li>
+        <li class="stage-item">
+          <div class="stage-icon waiting" id="icon-docx" aria-hidden="true">○</div>
+          <div class="stage-name muted" id="name-docx">Compiling .docx files</div>
+          <div class="stage-detail" id="detail-docx"></div>
+        </li>
       </ul>
       <div class="log-wrap" id="log-wrap" role="log" aria-label="Generation log" aria-live="polite"></div>
     </div>
@@ -238,7 +393,10 @@
     <div class="results-card">
       <div class="results-header">
         <div class="results-icon" aria-hidden="true">✅</div>
-        <div><div class="results-title">Lesson Plans Ready</div><div class="results-sub" id="results-sub"></div></div>
+        <div>
+          <div class="results-title">Lesson Plans Ready</div>
+          <div class="results-sub" id="results-sub"></div>
+        </div>
       </div>
       <div class="download-list" id="download-list"></div>
     </div>
@@ -247,20 +405,21 @@
 </main>
 
 <footer>
-  EduWonderLab · Neft.Alba · LP Engine v2.2 · Reveal Math Grade 6 &nbsp;·&nbsp;
+  EduWonderLab · Neft.Alba · LP Engine v2.1 · Reveal Math Grade 6 &nbsp;·&nbsp;
   Press <kbd>Enter</kbd> on the drop zone to browse files
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
         integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
 <script>
 'use strict';
 
 const TOTAL_STAGES = 4;
-const MAX_FILE_MB  = 50;
-const MODEL_ID     = 'claude-opus-4-6';  // FIXED: valid model name
-const LS_KEY       = 'ewl_api_key';
+const MAX_FILE_MB   = 50;
+const MODEL_ID      = 'claude-3-5-sonnet-20241022';
+const LS_KEY        = 'ewl_api_key';
 
 let uploadedFile   = null;
 let blockLength    = '90';
@@ -270,21 +429,15 @@ let objectURLs     = [];
 const dropZone  = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 
-// Restore saved API key
 (function restoreKey() {
   try { const s = localStorage.getItem(LS_KEY); if (s) document.getElementById('api-key').value = s; } catch(e) {}
-})();
-
-// Set today's date
-(function setTodayDate() {
-  const now = new Date();
-  document.getElementById('lesson-date').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
 })();
 
 dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
 dropZone.addEventListener('drop', e => {
-  e.preventDefault(); dropZone.classList.remove('drag-over');
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
   const f = e.dataTransfer.files[0];
   if (f && f.name.toLowerCase().endsWith('.pptx')) {
     if (f.size > MAX_FILE_MB * 1024 * 1024) { showFieldError('err-file', `File exceeds ${MAX_FILE_MB}MB limit.`); return; }
@@ -306,6 +459,7 @@ function setFile(f) {
 }
 
 function removeFile(e) { e.stopPropagation(); _clearFile(); }
+
 function _clearFile() {
   uploadedFile = null;
   dropZone.className = 'drop-zone';
@@ -341,16 +495,17 @@ function log(msg, level = '') {
   const line = document.createElement('div');
   line.className = 'log-line' + (level ? ' ' + level : '');
   line.textContent = `[${new Date().toLocaleTimeString('en-US', { hour12: false })}] ${msg}`;
-  wrap.appendChild(line); wrap.scrollTop = wrap.scrollHeight;
+  wrap.appendChild(line);
+  wrap.scrollTop = wrap.scrollHeight;
 }
 
 function setStage(id, state, detail = '') {
-  const MAP = { waiting:{cls:'waiting',text:'○'}, running:{cls:'running',text:'●'}, done:{cls:'done',text:'✓'}, error:{cls:'error',text:'✕'} };
+  const MAP = { waiting: { cls:'waiting', text:'○' }, running: { cls:'running', text:'●' }, done: { cls:'done', text:'✓' }, error: { cls:'error', text:'✕' } };
   const cfg = MAP[state] || MAP.waiting;
-  document.getElementById('icon-'+id).className   = 'stage-icon ' + cfg.cls;
-  document.getElementById('icon-'+id).textContent = cfg.text;
-  document.getElementById('name-'+id).className   = 'stage-name' + (state === 'waiting' ? ' muted' : '');
-  document.getElementById('detail-'+id).textContent = detail;
+  document.getElementById('icon-' + id).className   = 'stage-icon ' + cfg.cls;
+  document.getElementById('icon-' + id).textContent = cfg.text;
+  document.getElementById('name-' + id).className   = 'stage-name' + (state === 'waiting' ? ' muted' : '');
+  document.getElementById('detail-' + id).textContent = detail;
 }
 
 function setProgress(n) {
@@ -360,119 +515,141 @@ function setProgress(n) {
   document.getElementById('progress-label').textContent = `${n} / ${TOTAL_STAGES} stages`;
 }
 
-// ── EXTRACT PPTX TEXT via JSZip (avoids binary upload media_type error) ──
 async function extractPptxText(file) {
-  const buf  = await file.arrayBuffer();
-  const zip  = await JSZip.loadAsync(buf);
+  const arrayBuffer = await file.arrayBuffer();
+  const zip = await JSZip.loadAsync(arrayBuffer);
   const slideFiles = Object.keys(zip.files)
-    .filter(n => /^ppt\/slides\/slide\d+\.xml$/.test(n))
-    .sort((a,b) => parseInt(a.match(/\d+/)[0]) - parseInt(b.match(/\d+/)[0]));
-  let text = '';
-  for (const sf of slideFiles) {
-    const xml = await zip.files[sf].async('string');
-    const slideText = xml
-      .replace(/<a:t[^>]*>([\s\S]*?)<\/a:t>/g, (_, t) => t + ' ')
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'")
-      .replace(/\s+/g,' ').trim();
-    const num = sf.match(/slide(\d+)/)[1];
-    if (slideText.length > 2) text += `\n--- Slide ${num} ---\n${slideText}\n`;
+    .filter(name => /^ppt\/slides\/slide\d+\.xml$/.test(name))
+    .sort((a, b) => parseInt(a.match(/\d+/)[0], 10) - parseInt(b.match(/\d+/)[0], 10));
+
+  if (!slideFiles.length) throw new Error('No slides found in PPTX. Please check the file is a valid .pptx.');
+
+  const parts = [];
+  for (const name of slideFiles) {
+    const xml = await zip.files[name].async('string');
+    const text = xml
+      .replace(/<a:t>/g, ' ')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+      .replace(/\s+/g, ' ').trim();
+    const slideNum = name.match(/\d+/)[0];
+    if (text) parts.push(`--- Slide ${slideNum} ---\n${text}`);
   }
-  // Also grab speaker notes
+
   const noteFiles = Object.keys(zip.files)
-    .filter(n => /^ppt\/notesSlides\/notesSlide\d+\.xml$/.test(n))
-    .sort((a,b) => parseInt(a.match(/\d+/)[0]) - parseInt(b.match(/\d+/)[0]));
-  if (noteFiles.length) {
-    text += '\n\n=== SPEAKER NOTES ===\n';
-    for (const nf of noteFiles) {
-      const xml  = await zip.files[nf].async('string');
-      const note = xml.replace(/<a:t[^>]*>([\s\S]*?)<\/a:t>/g, (_, t) => t + ' ').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
-      const num  = nf.match(/\d+/)[0];
-      if (note.length > 5) text += `Note ${num}: ${note}\n`;
-    }
+    .filter(name => /^ppt\/notesSlides\/notesSlide\d+\.xml$/.test(name))
+    .sort((a, b) => parseInt(a.match(/\d+/)[0], 10) - parseInt(b.match(/\d+/)[0], 10));
+
+  for (const name of noteFiles) {
+    const xml = await zip.files[name].async('string');
+    const text = xml
+      .replace(/<a:t>/g, ' ')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+      .replace(/\s+/g, ' ').trim();
+    const slideNum = name.match(/\d+/)[0];
+    if (text) parts.push(`--- Notes for Slide ${slideNum} ---\n${text}`);
   }
-  return text.trim() || '(No text found in slides)';
+
+  return parts.join('\n\n');
 }
 
-// ── COMPACT API CALL ──────────────────────────────────────────────────────
-async function claudeCall(apiKey, systemPrompt, userText, maxTokens = 6000) {
-  const controller = new AbortController();
-  const timeoutId  = setTimeout(() => controller.abort(), 90000); // 90s timeout
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      signal: controller.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: MODEL_ID,
-        max_tokens: maxTokens,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userText }]
-      })
-    });
-    clearTimeout(timeoutId);
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({}));
-      throw new Error(
-        resp.status === 401 ? 'Invalid API key — check your Anthropic key.' :
-        resp.status === 429 ? 'Rate limited — wait a moment and retry.' :
-        resp.status >= 500  ? `Anthropic server error (${resp.status}) — try again.` :
-        err.error?.message  || `API error ${resp.status}`
-      );
-    }
-    const data = await resp.json();
-    return data.content.map(b => b.text || '').join('');
-  } catch(err) {
-    clearTimeout(timeoutId);
-    if (err.name === 'AbortError') throw new Error('Request timed out (90s). Try a smaller PPTX or retry.');
-    throw err;
+async function claudeCall(apiKey, systemPrompt, userContent, maxTokens = 8000) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: MODEL_ID, max_tokens: maxTokens, system: systemPrompt, messages: [{ role: 'user', content: userContent }] })
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(
+      resp.status === 401 ? 'Invalid API key — check your Anthropic key and try again.' :
+      resp.status === 429 ? 'Rate limited — wait a moment and retry.' :
+      resp.status >= 500  ? `Anthropic server error (${resp.status}) — try again shortly.` :
+      err.error?.message || `API error ${resp.status}`
+    );
   }
+  const data = await resp.json();
+  return data.content.map(b => b.text || '').join('');
 }
 
-// ── COMPACT EXTRACT SYSTEM PROMPT ────────────────────────────────────────
-const EXTRACT_SYSTEM = `Extract structured data from Reveal Math Grade 6 PPTX slides. Return JSON only — no prose, no markdown.
+const EXTRACT_SYSTEM = `You are extracting structured content from a Reveal Math Grade 6 PPTX (Baltimore County Public Schools). Analyze all slides and return a JSON object ONLY — no prose, no markdown fences.
 
-Schema:
-{"unit":"","lesson":"","standard":"6.XX.X.X","standardFull":"","session1":{"context":"","iv_name":"","dv_name":"","iv_symbol":"x","dv_symbol":"y","rate":"","equation":"","table_values":[],"vocab":[{"term":"","definition":"","spanish":""}],"objectives":{"content":"","language":""},"allProblems":[],"keyValues":{}},"session2":{same}}
+Extract:
+{
+  "unit": "",
+  "lesson": "",
+  "standard": "6.XX.X.X",
+  "standardFull": "Full CCSS text",
+  "session1": {
+    "context": "Real-world scenario name",
+    "iv_name": "independent variable name",
+    "dv_name": "dependent variable name",
+    "iv_symbol": "x",
+    "dv_symbol": "y",
+    "rate": "e.g. $45 per ticket",
+    "equation": "y = 45x",
+    "table_values": [[iv,dv],...],
+    "vocab": [{"term":"","definition":"","spanish":""},...],
+    "objectives": {"content":"","language":""},
+    "slideMap": {"becurious":0,"guided":0,"collab":0,"independent":0,"exit":0},
+    "allProblems": ["problem text",...],
+    "keyValues": {}
+  },
+  "session2": { "same structure as session1" }
+}
 
-Rules: Use "" or [] for missing fields. Append [INFERRED] to any inferred value.`;
+If a field is not found, use "" or [] — never invent values. Mark any inferred values with "[INFERRED]" suffix.`;
 
-// ── COMPACT LP SYSTEM PROMPT ──────────────────────────────────────────────
 function buildLPSystem(session, blockLen, date, unitLesson) {
-  const phases90 = 'Warm-Up(8) · Launch(7) · Be Curious(10) · Guided(15) · Collab(15) · Independent(12) · Closing(8) · Exit Ticket(15)';
-  const phases45 = 'Warm-Up+Launch(5) · Be Curious(8) · Guided(12) · Independent+partner check(12) · Exit Ticket Tier 1 only(5)';
-  const phases   = blockLen === '90' ? phases90 : phases45;
-  const s2note   = session === 2 ? '\nS2 RULES: DO NOW = "Review from Session 1" + S1 scenario reference + TWR stem tied to S1. One misconception row = S1 carryover. Exit Tier 3 references both sessions.' : '';
+  const phases = blockLen === '90'
+    ? '8 phases: Warm-Up (8min), Launch (7min), Be Curious (10min), Guided Practice (15min), Collaborative Practice (15min), Independent Practice (12min), Closing (8min), Exit Ticket (15min)'
+    : '5 phases: Warm-Up+Launch combined (5min), Be Curious (8min), Guided Practice (12min), Independent Practice with partner check (12min), Exit Ticket (5min Tier 1 only)';
+  const s2note = session === 2 ? 'SESSION 2: DO NOW labeled "Review from Session 1." References Session 1 scenario by name. Includes one TWR stem tied to S1. At least one misconception row addresses carryover from S1. Exit Ticket Tier 3 references both sessions.' : '';
+  return `You are generating a complete, deployment-ready Grade 6 Math lesson plan for ${date}${unitLesson ? ', ' + unitLesson : ''}, Session ${session}.
+Header: Neft.Alba
 
-  return `Generate a complete Grade 6 Math lesson plan. Header: Neft.Alba. Date: ${date}${unitLesson ? ', ' + unitLesson : ''}. Session ${session}. Block: ${blockLen} min.
-Phases: ${phases}${s2note}
+BLOCK: ${blockLen} min — ${phases}
 
-SECTION ORDER (all required, no omissions):
+EXACT SECTION ORDER (never omit any):
 1. DO NOW
-2. STANDARDS TABLE (G5 prerequisite | G6 target | G7 extension)
-3. OBJECTIVES — Content "I can..." + Language "I will..." (WIDA) — labeled separately, each with ☐ Before | ☐ After
-4. PROCEDURES TABLE — Phase(Time) | Teacher Moves | Student Moves | SPED Supports | ESOL/WIDA | Formative Check
-5. VOCABULARY TABLE — Tier | Term | Definition | Morphology | EN-ES Cognate | Cross-Disciplinary
-6. MISCONCEPTIONS TABLE — # | Belief | Cognitive Root | Corrective Move | Intervention Route
-7. SMALL-GROUP STATIONS — Reteach(SPED,Reveal Workbook) / Practice(A/B,Reveal Workbook) / Enrichment
-8. STUDENT NOTE SHEET — guided notes, structured problems, TWR prompts, goal tracker 1-4
-9. EXIT TICKET — Tier 1(identify) / Tier 2(explain+TWR) / Tier 3(justify+transfer)
-10. IEP ACCOMMODATIONS MATRIX — all 7 students
+2. STANDARDS TABLE (Grade 5 prerequisite / Grade 6 target / Grade 7 extension)
+3. OBJECTIVES — Content Objective (I can...) + Language Objective (WIDA-aligned I will...) — labeled separately, each with ☐ Before | ☐ After checkbox
+4. LESSON PROCEDURES TABLE — columns: Phase (Time) | Teacher Moves | Student Moves | SPED Supports | ESOL/WIDA Scaffolds | Formative Check
+5. VOCABULARY TABLE — columns: Tier | Term | Student-Friendly Definition | Morphology (root+affix) | EN-ES Cognate ✓/✗ | Cross-Disciplinary Use
+6. MISCONCEPTIONS + INTERVENTIONS TABLE — columns: # | Student Belief | Cognitive Root | Teacher Corrective Move | Intervention Route
+7. SMALL-GROUP STATIONS — Reteach (teacher-led, all 7 SPED, Reveal Workbook problems) / Practice (A/B, Reveal Workbook) / Enrichment (independent, extension)
+8. STUDENT NOTE SHEET (guided notes, structured problems, TWR prompts, goal tracker 1-4)
+9. EXIT TICKET — Tier 1 (identify+frame) / Tier 2 (explain+TWR 2-3 sentences) / Tier 3 (multi-variable+contrastive justification+transfer)
+10. GRADE 6 IEP ACCOMMODATIONS MATRIX — all 7 students full accommodation lists
 
-SPED: M.E.(starters,banks,chunking,time,manipulatives) R.B.(organizers,simplified,small group,breaks) J.C.(TTS,verbal,time,pre-teach) R.M.G.(visual schedules,sensory,motor,predictability) J.L.(movement,expectations,reinforcement,chunking,visuals) S.D.L.P.(multi-sensory,manipulatives,verbal,calculator) A.M.M.(wait time,safe responses,1:1,reassurance)
+SPED ROSTER (use initials in lesson plan, NEVER in student-facing content):
+M.E. — sentence starters, word banks, chunking, extended time, manipulatives
+R.B. — graphic organizers, simplified language, small group, breaks
+J.C. — TTS, verbal responses, extended time, pre-teaching
+R.M.G. — visual schedules, sensory mods, motor mods, predictability
+J.L. — movement, clear expectations, reinforcement, chunking, visuals
+S.D.L.P. — multi-sensory, manipulatives, verbal responses, calculator
+A.M.M. — wait time, safe responses, 1:1 check-ins, reassurance
 
-PROCEDURES RULES: Teacher Moves=3-5 actions+slide refs(Slide N)+[T3]/[T4]/[T4★]. Min [T4★] in 2 phases. Student Moves=observable+TWR stem italicized with ___ blanks. SPED=each student ≥${blockLen==='90'?3:2} phases matched to cognitive load. ESOL=always "L1-2:... L3-4:... L5:...". Formative=2+ entries+[T4]+[T3]. Workbook problems only for Reteach/Practice (no invented activities). Misconceptions=≥4 rows each with specific intervention. Vocab=≥4 terms+morphology+cognate.
+PROCEDURES TABLE RULES:
+- Teacher Moves: 3-5 actions, slide refs inline (Slide N), TEACH indicators [T3]/[T4]/[T4★]
+- Minimum [T4★] in 2 phases per session
+- Student Moves: observable actions + TWR stem italicized with ___ blanks emerging from that phase's math reasoning
+- SPED: each student in ≥3 phases (90min) or ≥2 phases (45min), matched to cognitive load
+- ESOL: always 3 bands "L1-2: ... L3-4: ... L5: ..."
+- Formative Check: 2+ entries, [T4] monitoring + [T3] probe. Exit phase adds "Target: 80%+ [criterion]."
+- Workbook problems for Reteach and Practice stations ONLY (no invented activities)
+- Misconceptions: ≥4 rows, each with specific intervention route (reteach problem, slide revisit, or IP problem)
+- Vocab: ≥4 terms with morphology + EN-ES cognate
 
-TWR: stems emerge from phase math reasoning, italicized, ___ blanks, never generic, never isolated.
-Output complete Markdown. ## for sections. Pipe tables. No placeholders. No truncation. Verify all math.`;
+${s2note}
+
+TWR RULE: Stems emerge from phase-specific mathematical reasoning, italicized, ___ blanks. Never generic. Never in a separate isolated box.
+
+Output the complete lesson plan in Markdown. Use ## for section headers. Use tables with | pipes |. Write every section completely — no placeholders, no "add here", no truncation. Math must be verified. First-draft-final standard.`;
 }
 
-// ── DOCX BUILDER (unchanged from original) ───────────────────────────────
 function safeSlug(str) { return str.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_').slice(0, 60) || 'file'; }
 function escXml(s) { return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function escHtml(s) { return escXml(s); }
@@ -556,8 +733,11 @@ function buildDocx(markdownContent) {
     else if (line.trim() === '') { bodyXml += emptyPara(); }
     else { bodyXml += para(inlineFormat(line)); }
   }
+
   const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" mc:Ignorable="w14"><w:body>\n${bodyXml}    <w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1080" w:right="1080" w:bottom="1080" w:left="1080"/></w:sectPr></w:body></w:document>`;
+
   const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/><w:sz w:val="22"/><w:szCs w:val="22"/><w:color w:val="242A30"/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/><w:pPr><w:spacing w:after="80"/></w:pPr><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="22"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:before="240" w:after="120"/></w:pPr><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:b/><w:sz w:val="36"/><w:color w:val="1C2E42"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:before="200" w:after="80"/><w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="387F84"/></w:pBdr></w:pPr><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:b/><w:sz w:val="28"/><w:color w:val="1C2E42"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading3"><w:name w:val="heading 3"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:before="160" w:after="60"/></w:pPr><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:b/><w:sz w:val="24"/><w:color w:val="387F84"/></w:rPr></w:style><w:style w:type="table" w:styleId="TableGrid"><w:name w:val="Table Grid"/><w:tblPr><w:tblBorder><w:top w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/><w:left w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/><w:right w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/></w:tblBorder></w:tblPr><w:rPr><w:sz w:val="20"/></w:rPr></w:style></w:styles>`;
+
   const zip = new JSZip();
   zip.file('[Content_Types].xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>`);
   zip.file('_rels/.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`);
@@ -567,7 +747,6 @@ function buildDocx(markdownContent) {
   return zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }
 
-// ── MAIN GENERATION FLOW ─────────────────────────────────────────────────
 async function startGeneration() {
   clearFieldError('err-file'); clearFieldError('err-key');
   let valid = true;
@@ -578,7 +757,7 @@ async function startGeneration() {
 
   try { localStorage.setItem(LS_KEY, apiKey); } catch(e) {}
 
-  const dateVal   = document.getElementById('lesson-date').value;
+  const dateVal = document.getElementById('lesson-date').value;
   const lessonDate = dateVal
     ? new Date(dateVal + 'T12:00:00').toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' })
     : new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
@@ -594,19 +773,16 @@ async function startGeneration() {
   setProgress(0);
 
   try {
-    // Stage 1: Extract text from PPTX via JSZip (no binary upload)
     setStage('extract', 'running');
     log('Reading PPTX file…', 'info');
-    const slideText = await extractPptxText(uploadedFile);
-    log(`Extracted ${slideText.length} chars from slides`, 'ok');
 
-    // Send text to Claude for structured extraction
-    log('Sending to Claude for extraction…', 'info');
-    const extractResult = await claudeCall(
-      apiKey,
-      EXTRACT_SYSTEM,
-      `Extract lesson data from these Reveal Math slides. Return JSON only.\n\n${slideText}`,
-      3000
+    const slideText = await extractPptxText(uploadedFile);
+    log(`Extracted ${slideText.split('\n').filter(l => l.startsWith('--- Slide')).length} slides of text.`);
+    log('Sending extracted text to Claude…', 'info');
+
+    const extractResult = await claudeCall(apiKey, EXTRACT_SYSTEM,
+      `Here is the full extracted text from the Reveal Math lesson PPTX:\n\n${slideText}\n\nExtract all content and return JSON only.`,
+      4000
     );
 
     let extract = {};
@@ -616,37 +792,32 @@ async function startGeneration() {
     } catch(e) { log('JSON parse warning — using raw extraction', 'warn'); extract = { _raw: extractResult }; }
     setStage('extract', 'done', extract.standard || ''); setProgress(1);
 
-    // Stage 2: Session 1 LP
     setStage('s1', 'running');
     log('Generating Session 1 lesson plan…', 'info');
-    const s1Text = await claudeCall(
-      apiKey,
-      buildLPSystem(1, blockLength, lessonDate, unitLesson),
-      `Lesson data:\n${JSON.stringify(extract, null, 2)}\n\nGenerate the complete Session 1 lesson plan.`,
-      7000
-    );
+    const s1Text = await claudeCall(apiKey, buildLPSystem(1, blockLength, lessonDate, unitLesson),
+      `Here is the extracted lesson data:\n\n${JSON.stringify(extract, null, 2)}\n\nGenerate the complete Session 1 lesson plan now.`, 8000);
     log(`Session 1 generated (${(s1Text.length / 1024).toFixed(0)} KB)`, 'ok');
     setStage('s1', 'done', `${s1Text.length} chars`); setProgress(2);
 
-    // Stage 3: Session 2 LP (include S1 header as reference, not full text)
     setStage('s2', 'running');
     log('Generating Session 2 lesson plan…', 'info');
-    const s1Header = s1Text.split('\n').slice(0, 60).join('\n'); // first 60 lines only
-    const s2Text = await claudeCall(
-      apiKey,
-      buildLPSystem(2, blockLength, lessonDate, unitLesson),
-      `Lesson data:\n${JSON.stringify(extract, null, 2)}\n\nSession 1 reference (DO NOW + Objectives only):\n${s1Header}\n\nGenerate the complete Session 2 lesson plan.`,
-      7000
-    );
+    const s1Summary = s1Text.split('\n').reduce((acc, line, i) => {
+      if (acc.done) return acc;
+      if (i > 80 || line.startsWith('## 4.') || line.startsWith('## LESSON PROCEDURES')) { acc.done = true; return acc; }
+      acc.lines.push(line); return acc;
+    }, { lines: [], done: false }).lines.join('\n');
+
+    const s2Text = await claudeCall(apiKey, buildLPSystem(2, blockLength, lessonDate, unitLesson),
+      `Here is the extracted lesson data:\n\n${JSON.stringify(extract, null, 2)}\n\nSession 1 reference (DO NOW, Standards, Objectives):\n\n${s1Summary}\n\nGenerate the complete Session 2 lesson plan now.`, 8000);
     log(`Session 2 generated (${(s2Text.length / 1024).toFixed(0)} KB)`, 'ok');
     setStage('s2', 'done', `${s2Text.length} chars`); setProgress(3);
 
-    // Stage 4: Build .docx
     setStage('docx', 'running');
     log('Compiling .docx files…', 'info');
     const dateSlug = dateVal ? dateVal.replace(/-/g, '') : 'date';
     const unitSlug = safeSlug(unitLesson) || 'lesson';
     const [s1Blob, s2Blob] = await Promise.all([buildDocx(s1Text), buildDocx(s2Text)]);
+
     generatedFiles = [
       { name: `LP_${unitSlug}_S1_${dateSlug}_NeftAlba.docx`, blob: s1Blob, label: 'Session 1 — Lesson Plan', size: s1Blob.size },
       { name: `LP_${unitSlug}_S2_${dateSlug}_NeftAlba.docx`, blob: s2Blob, label: 'Session 2 — Lesson Plan', size: s2Blob.size }
@@ -660,7 +831,7 @@ async function startGeneration() {
     document.getElementById('error-section').style.display = 'block';
     document.getElementById('error-body').textContent = err.message;
     ['extract','s1','s2','docx'].forEach(id => {
-      if (document.getElementById('icon-'+id).classList.contains('running')) setStage(id, 'error', 'failed');
+      if (document.getElementById('icon-' + id).classList.contains('running')) setStage(id, 'error', 'failed');
     });
     document.getElementById('generate-btn').disabled = false;
   }
@@ -697,6 +868,11 @@ function resetAll() {
   objectURLs.forEach(u => URL.revokeObjectURL(u)); objectURLs = []; generatedFiles = [];
   _clearFile();
 }
+
+(function setTodayDate() {
+  const now = new Date();
+  document.getElementById('lesson-date').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+})();
 </script>
 </body>
 </html>
