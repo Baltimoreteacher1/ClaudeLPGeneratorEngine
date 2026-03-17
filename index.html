@@ -259,10 +259,8 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
   <h1 class="page-title">Lesson Plan Engine</h1>
   <p class="page-sub">Upload your Reveal Math PPTX. The engine extracts all values verbatim from your slides, lets you verify them, then generates two deployment-ready lesson plans with full QA.</p>
 
-  <!-- ═══ INPUT SECTION ═══ -->
   <div id="input-section">
 
-    <!-- STEP 1: UPLOAD -->
     <div class="card" id="card-upload">
       <div class="card-header">
         <div class="step-badge" id="badge-1" aria-label="Step 1">1</div>
@@ -271,7 +269,6 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
           <div class="card-hint">Reveal Math PPTX with speaker notes, scenarios, vocabulary, and objectives. Content is extracted verbatim — nothing invented.</div>
         </div>
       </div>
-      <!-- Accessible: label wraps hidden input -->
       <label class="drop-label-wrap" id="drop-zone" aria-label="Upload PPTX — click or drag and drop">
         <input type="file" id="file-input" accept=".pptx" aria-label="Choose PPTX file">
         <span class="drop-icon-el" aria-hidden="true">📊</span>
@@ -281,7 +278,6 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
       <div class="field-err" id="err-file" role="alert"></div>
     </div>
 
-    <!-- STEP 2: SESSION DETAILS -->
     <div class="card">
       <div class="card-header">
         <div class="step-badge" aria-label="Step 2">2</div>
@@ -317,7 +313,6 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
       </div>
     </div>
 
-    <!-- STEP 3: API KEY -->
     <div class="card">
       <div class="card-header">
         <div class="step-badge" aria-label="Step 3">3</div>
@@ -344,10 +339,7 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
       <span aria-hidden="true">⚡</span> Extract &amp; Generate Lesson Plans
     </button>
 
-  </div><!-- /input-section -->
-
-  <!-- ═══ REVIEW PANEL ═══ (shown after extraction, before generation) -->
-  <div id="review-section" aria-live="polite">
+  </div><div id="review-section" aria-live="polite">
     <div class="review-card">
       <div class="review-header">
         <div class="review-icon" aria-hidden="true">🔍</div>
@@ -357,10 +349,8 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
         </div>
       </div>
       <div id="quality-gate-msg" class="quality-gate" style="display:none"></div>
-      <!-- S1 -->
       <p style="font-family:'Courier New',Courier,monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:10px">Session 1</p>
       <div class="review-grid" id="review-grid-s1"></div>
-      <!-- S2 -->
       <p style="font-family:'Courier New',Courier,monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin:14px 0 10px">Session 2</p>
       <div class="review-grid" id="review-grid-s2"></div>
       <div class="review-actions">
@@ -370,7 +360,6 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
     </div>
   </div>
 
-  <!-- ═══ PROGRESS ═══ -->
   <div id="progress-section" aria-live="polite" aria-label="Generation progress">
     <div class="progress-card">
       <div class="progress-header">
@@ -395,7 +384,6 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
     </div>
   </div>
 
-  <!-- ═══ ERROR ═══ -->
   <div id="error-section" role="alert" aria-live="assertive">
     <div class="err-title"><span aria-hidden="true">⚠</span> Generation Failed</div>
     <div class="err-msg" id="err-msg"></div>
@@ -409,7 +397,6 @@ footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-t
     </div>
   </div>
 
-  <!-- ═══ RESULTS ═══ -->
   <div id="results-section" aria-live="polite">
     <div class="results-card">
       <div class="results-head">
@@ -452,7 +439,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 // ══════════════════════════════════════════════════════════════
 //  CONSTANTS
 // ══════════════════════════════════════════════════════════════
-const MODEL        = 'claude-sonnet-4-6'; // Update if needed: claude-opus-4-5 also valid
+const MODEL        = 'claude-3-7-sonnet-20250219'; // Fixed model string
 const LS_KEY       = 'ewl_api_key';
 const SS_KEY       = 'ewl_api_key_session';
 const MAX_MB       = 50;
@@ -848,7 +835,7 @@ async function extractPptxContent(file) {
 // Named entity map — covers all entities in Reveal Math PPTX content
 const NAMED_ENTITIES = {
   amp:'&', lt:'<', gt:'>', quot:'"', apos:"'",
-  nbsp:' ', ndash:'–', mdash:'—',
+  nbsp:' ', ndash:'–', mdash:'—',
   lsquo:'‘', rsquo:'’', ldquo:'“', rdquo:'”',
   bull:'•', hellip:'…', times:'×', divide:'÷', minus:'−',
   le:'≤', ge:'≥', ne:'≠', asymp:'≈', infin:'∞',
@@ -918,6 +905,7 @@ async function apiCall(system, user, maxTokens=8000, attempt=1) {
         'Content-Type':    'application/json',
         'x-api-key':       State.apiKey,
         'anthropic-version': '2023-06-01',
+        'anthropic-dangerously-allow-browser': 'true'
       },
       body: JSON.stringify({ model: MODEL, max_tokens: maxTokens, system, messages: [{ role:'user', content: user }] }),
     });
@@ -1141,700 +1129,707 @@ function readReviewValues(ext) {
     const sess = prefix==='s1' ? merged.session1 : merged.session2;
     REVIEW_FIELDS.forEach(f => {
       const inp = document.getElementById(`rv_${prefix}_${f.key}`);
-      if (inp) sess[f.key] = inp.value.trim();
-    });
-  });
-  return merged;
-}
+      if (inp) sess[f.key] = inp.valuefunction readReviewValues(ext) {
+      // Merge user-edited values back into the extract
+      const merged = JSON.parse(JSON.stringify(ext));
+      ['s1','s2'].forEach(prefix => {
+        const sess = prefix==='s1' ? merged.session1 : merged.session2;
+        REVIEW_FIELDS.forEach(f => {
+          const inp = document.getElementById(`rv_${prefix}_${f.key}`);
+          if (inp) sess[f.key] = inp.value.trim();
+        });
+      });
+      return merged;
+    }
 
-// ══════════════════════════════════════════════════════════════
-//  LP GENERATION PROMPT
-// ══════════════════════════════════════════════════════════════
-function buildLPPrompt(session, extract, s1Summary='') {
-  const blk = State.blockLength || '90';
-  const s   = session===1 ? extract.session1 : extract.session2;
-  const phases = blk==='90'
-    ? `Ph.1 Warm-Up (8min) | Ph.2 Launch (7min) | Ph.3 Be Curious (10min) | Ph.4 Guided Practice (15min) | Ph.5 Collaborative Practice (15min) | Ph.6 Independent Practice (12min) | Ph.7 Closing (8min) | Ph.8 Exit Ticket (15min)`
-    : `Ph.1 Warm-Up+Launch (5min) | Ph.2 Be Curious (8min) | Ph.3 Guided Practice (12min) | Ph.4 Independent+Partner Check (12min) | Ph.5 Exit Ticket (5min, Tier 1 only)`;
+    // ══════════════════════════════════════════════════════════════
+    //  LP GENERATION PROMPT
+    // ══════════════════════════════════════════════════════════════
+    function buildLPPrompt(session, extract, s1Summary='') {
+      const blk = State.blockLength || '90';
+      const s   = session===1 ? extract.session1 : extract.session2;
+      const phases = blk==='90'
+        ? `Ph.1 Warm-Up (8min) | Ph.2 Launch (7min) | Ph.3 Be Curious (10min) | Ph.4 Guided Practice (15min) | Ph.5 Collaborative Practice (15min) | Ph.6 Independent Practice (12min) | Ph.7 Closing (8min) | Ph.8 Exit Ticket (15min)`
+        : `Ph.1 Warm-Up+Launch (5min) | Ph.2 Be Curious (8min) | Ph.3 Guided Practice (12min) | Ph.4 Independent+Partner Check (12min) | Ph.5 Exit Ticket (5min, Tier 1 only)`;
 
-  const s2rules = session===2 ? `
-SESSION 2 RULES (non-negotiable):
-- DO NOW labeled "Review from Session 1." Must reference "${extract.session1?.context}" by name with one TWR stem.
-- Misconceptions row 1 or 2: carryover error from S1 (confusing S1/S2 equations or variable roles).
-- Exit Ticket Tier 3: references BOTH "${extract.session1?.context}" and "${s.context}" by name.
-- At least 2 Formative Check entries include probing question comparing S2 to S1.
-S1 REFERENCE DATA:
-${s1Summary}` : '';
+      const s2rules = session===2 ? `
+    SESSION 2 RULES (non-negotiable):
+    - DO NOW labeled "Review from Session 1." Must reference "${extract.session1?.context}" by name with one TWR stem.
+    - Misconceptions row 1 or 2: carryover error from S1 (confusing S1/S2 equations or variable roles).
+    - Exit Ticket Tier 3: references BOTH "${extract.session1?.context}" and "${s.context}" by name.
+    - At least 2 Formative Check entries include probing question comparing S2 to S1.
+    S1 REFERENCE DATA:
+    ${s1Summary}` : '';
 
-  return `Generate a COMPLETE, zero-placeholder, deployment-ready Grade 6 Math lesson plan.
-Header: Neft.Alba | Date: ${State.dateStr}${State.unitLesson ? ' | '+State.unitLesson : ''} | Session ${session} | ${blk}-min block | Standard: ${extract.standard}
+      return `Generate a COMPLETE, zero-placeholder, deployment-ready Grade 6 Math lesson plan.
+    Header: Neft.Alba | Date: ${State.dateStr}${State.unitLesson ? ' | '+State.unitLesson : ''} | Session ${session} | ${blk}-min block | Standard: ${extract.standard}
 
-SOURCE DATA (verbatim from slides — use these exact values):
-Scenario: ${s.context}
-IV: ${s.iv_name} (${s.iv_symbol}) | DV: ${s.dv_name} (${s.dv_symbol})
-Rate: ${s.rate} | Initial value: ${s.initialValue||'0'} | Equation: ${s.equation}
-Table: ${JSON.stringify(s.tableValues)}
-Vocab terms: ${(s.vocabTerms||[]).map(v=>v.term||v).join(', ')}
-Content Objective: ${s.contentObjective}
-Language Objective: ${s.languageObjective}
-Slide refs: ${JSON.stringify(s.slides)}
-Workbook page: ${s.revealWorkbookPage}
-${s2rules}
+    SOURCE DATA (verbatim from slides — use these exact values):
+    Scenario: ${s.context}
+    IV: ${s.iv_name} (${s.iv_symbol}) | DV: ${s.dv_name} (${s.dv_symbol})
+    Rate: ${s.rate} | Initial value: ${s.initialValue||'0'} | Equation: ${s.equation}
+    Table: ${JSON.stringify(s.tableValues)}
+    Vocab terms: ${(s.vocabTerms||[]).map(v=>v.term||v).join(', ')}
+    Content Objective: ${s.contentObjective}
+    Language Objective: ${s.languageObjective}
+    Slide refs: ${JSON.stringify(s.slides)}
+    Workbook page: ${s.revealWorkbookPage}
+    ${s2rules}
 
-PHASES (${blk}min): ${phases}
+    PHASES (${blk}min): ${phases}
 
-OUTPUT — EXACTLY THESE 10 SECTIONS IN ORDER (## heading each):
+    OUTPUT — EXACTLY THESE 10 SECTIONS IN ORDER (## heading each):
 
-## 1. DO NOW
-3–5 min activator. Connects to prerequisite standard.${session===2?' Label: "Review from Session 1." Reference S1 scenario by name + TWR stem.':''}
+    ## 1. DO NOW
+    3–5 min activator. Connects to prerequisite standard.${session===2?' Label: "Review from Session 1." Reference S1 scenario by name + TWR stem.':''}
 
-## 2. STANDARDS TABLE
-| Grade 5 Prerequisite | Grade 6 Target Standard | Grade 7 Extension |
-Use: ${extract.standardGrade5Pre||'[Grade 5 prereq]'} / ${extract.standardFull||extract.standard} / ${extract.standardGrade7Ext||'[Grade 7 extension]'}
+    ## 2. STANDARDS TABLE
+    | Grade 5 Prerequisite | Grade 6 Target Standard | Grade 7 Extension |
+    Use: ${extract.standardGrade5Pre||'[Grade 5 prereq]'} / ${extract.standardFull||extract.standard} / ${extract.standardGrade7Ext||'[Grade 7 extension]'}
 
-## 3. OBJECTIVES
-Content Objective (labeled): "I can [verb] **[key term]** by [action]." — from: "${s.contentObjective}"
-Language Objective (labeled, WIDA): "I will [language function] using [scaffold] to [communicate math]." — from: "${s.languageObjective}"
-Both include: ☐ Before | ☐ After
+    ## 3. OBJECTIVES
+    Content Objective (labeled): "I can [verb] **[key term]** by [action]." — from: "${s.contentObjective}"
+    Language Objective (labeled, WIDA): "I will [language function] using [scaffold] to [communicate math]." — from: "${s.languageObjective}"
+    Both include: ☐ Before | ☐ After
 
-## 4. LESSON PROCEDURES TABLE
-| Phase (Time) | Teacher Moves | Student Moves | SPED Supports | ESOL/WIDA Scaffolds | Formative Check |
+    ## 4. LESSON PROCEDURES TABLE
+    | Phase (Time) | Teacher Moves | Student Moves | SPED Supports | ESOL/WIDA Scaffolds | Formative Check |
 
-TEACHER MOVES: 3–5 actions per phase. Slide refs inline: (Slide N). TEACH levels: [T3] [T4] [T4★]. Min [T4★] in 2 phases.
-STUDENT MOVES: Observable actions + TWR stem italicized, ___ blanks, using actual variable names "${s.iv_name}" and "${s.dv_name}".
-SPED (each student ≥${blk==='90'?3:2} phases, matched to load):
-  M.E.→starters/banks/chunking/ext.time/manip | R.B.→graphic org/simplified lang/small group/breaks
-  J.C.→TTS/verbal/ext.time/pre-teach | R.M.G.→visual sched/sensory/motor/predictability
-  J.L.→movement/expectations/reinforcement/chunking | S.D.L.P.→multi-sensory/manip/verbal/calc
-  A.M.M.→wait time/safe responses/1:1/reassurance
-ESOL: ALWAYS exactly "L1–2: [task]. L3–4: [task]. L5: [task]." — in every phase, every row.
-FORMATIVE CHECK: [T4] monitoring + [T3] probing question. Exit Ticket phase adds "Target: 80%+ [criterion]."
+    TEACHER MOVES: 3–5 actions per phase. Slide refs inline: (Slide N). TEACH levels: [T3] [T4] [T4★]. Min [T4★] in 2 phases.
+    STUDENT MOVES: Observable actions + TWR stem italicized, ___ blanks, using actual variable names "${s.iv_name}" and "${s.dv_name}".
+    SPED (each student ≥${blk==='90'?3:2} phases, matched to load):
+      M.E.→starters/banks/chunking/ext.time/manip | R.B.→graphic org/simplified lang/small group/breaks
+      J.C.→TTS/verbal/ext.time/pre-teach | R.M.G.→visual sched/sensory/motor/predictability
+      J.L.→movement/expectations/reinforcement/chunking | S.D.L.P.→multi-sensory/manip/verbal/calc
+      A.M.M.→wait time/safe responses/1:1/reassurance
+    ESOL: ALWAYS exactly "L1–2: [task]. L3–4: [task]. L5: [task]." — in every phase, every row.
+    FORMATIVE CHECK: [T4] monitoring + [T3] probing question. Exit Ticket phase adds "Target: 80%+ [criterion]."
 
-## 5. VOCABULARY TABLE
-| Tier | Term | Student-Friendly Definition | Morphology (root+affix) | EN-ES Cognate ✓/✗ | Cross-Disciplinary Use |
-Min 4 terms. Use terms: ${(s.vocabTerms||[]).map(v=>v.term||v).join(', ')||'[extract from slides]'}
+    ## 5. VOCABULARY TABLE
+    | Tier | Term | Student-Friendly Definition | Morphology (root+affix) | EN-ES Cognate ✓/✗ | Cross-Disciplinary Use |
+    Min 4 terms. Use terms: ${(s.vocabTerms||[]).map(v=>v.term||v).join(', ')||'[extract from slides]'}
 
-## 6. MISCONCEPTIONS + INTERVENTIONS TABLE
-| # | Student Belief | Cognitive Root | Teacher Corrective Move | Intervention Route |
-Min 4 rows. Intervention Route = specific reteach problem #, slide #, or IP problem #.
-${session===2?'Row 1 or 2 = carryover error from S1.':''}
+    ## 6. MISCONCEPTIONS + INTERVENTIONS TABLE
+    | # | Student Belief | Cognitive Root | Teacher Corrective Move | Intervention Route |
+    Min 4 rows. Intervention Route = specific reteach problem #, slide #, or IP problem #.
+    ${session===2?'Row 1 or 2 = carryover error from S1.':''}
 
-## 7. SMALL-GROUP STATIONS
-RETEACH (Teacher-Led): All 7 SPED — M.E., R.B., J.C., R.M.G., J.L., S.D.L.P., A.M.M.
-  Guiding Q | Workbook p.${s.revealWorkbookPage||'[VERIFY]'} problems [specific #s] | Expected artifact + TWR frame
-PRACTICE (Partner A/B): Workbook p.${s.revealWorkbookPage||'[VERIFY]'} [specific #s] | Expected artifact + TWR frame
-ENRICHMENT (Independent): DOK3 extension | Written paragraph + TWR frame
-RULE: Reteach + Practice = Reveal Workbook problems ONLY.
+    ## 7. SMALL-GROUP STATIONS
+    RETEACH (Teacher-Led): All 7 SPED — M.E., R.B., J.C., R.M.G., J.L., S.D.L.P., A.M.M.
+      Guiding Q | Workbook p.${s.revealWorkbookPage||'[VERIFY]'} problems [specific #s] | Expected artifact + TWR frame
+    PRACTICE (Partner A/B): Workbook p.${s.revealWorkbookPage||'[VERIFY]'} [specific #s] | Expected artifact + TWR frame
+    ENRICHMENT (Independent): DOK3 extension | Written paragraph + TWR frame
+    RULE: Reteach + Practice = Reveal Workbook problems ONLY.
 
-## 8. STUDENT NOTE SHEET
-(No student initials anywhere in this section.)
-Vocabulary blanks (4+ terms) | Scenario setup using "${s.context}" exact values | Table scaffold (IV/DV headers + ${(s.tableValues||[]).slice(0,2).map(r=>Array.isArray(r)?r[0]:'?').join(',')} as first rows) | Equation scaffold: ___ = ___ × ___ | TWR prompt using "${s.iv_name}" and "${s.dv_name}" | Goal tracker 1–4 with anchors
+    ## 8. STUDENT NOTE SHEET
+    (No student initials anywhere in this section.)
+    Vocabulary blanks (4+ terms) | Scenario setup using "${s.context}" exact values | Table scaffold (IV/DV headers + ${(s.tableValues||[]).slice(0,2).map(r=>Array.isArray(r)?r[0]:'?').join(',')} as first rows) | Equation scaffold: ___ = ___ × ___ | TWR prompt using "${s.iv_name}" and "${s.dv_name}" | Goal tracker 1–4 with anchors
 
-## 9. EXIT TICKET
-All 3 tiers use scenario "${s.context}":
-Tier 1: Identify + sentence frame with ___ blanks (${s.iv_name}/${s.dv_name})
-Tier 2: Identify + explain + TWR 2–3 sentences with justification
-Tier 3: Multi-step + contrastive justification${session===2?' + reference both S1 and S2 by scenario name':''}
+    ## 9. EXIT TICKET
+    All 3 tiers use scenario "${s.context}":
+    Tier 1: Identify + sentence frame with ___ blanks (${s.iv_name}/${s.dv_name})
+    Tier 2: Identify + explain + TWR 2–3 sentences with justification
+    Tier 3: Multi-step + contrastive justification${session===2?' + reference both S1 and S2 by scenario name':''}
 
-## 10. GRADE 6 IEP ACCOMMODATIONS MATRIX
-(No student names — initials only.)
-| Student | Accommodations | Phase Placement in This Lesson |
-All 7: M.E., R.B., J.C., R.M.G., J.L., S.D.L.P., A.M.M. — full accommodation list + which phases each appears in.
+    ## 10. GRADE 6 IEP ACCOMMODATIONS MATRIX
+    (No student names — initials only.)
+    | Student | Accommodations | Phase Placement in This Lesson |
+    All 7: M.E., R.B., J.C., R.M.G., J.L., S.D.L.P., A.M.M. — full accommodation list + which phases each appears in.
 
-ABSOLUTE RULES:
-1. Math: equation ${s.equation} must be consistent with all table values and exit ticket numbers. Verify before writing.
-2. No placeholders: zero "TBD", "add here", "...", empty cells.
-3. Source fidelity: all scenario/variable/equation/table values from source data above.
-4. TWR stems: must use actual variable names — never generic.
-5. [T4★]: must appear in both Teacher Moves AND Formative Check of same phase, ≥2 phases.
-6. WIDA 3-band: every procedure phase, format "L1–2: … L3–4: … L5: …"
-7. No student initials in sections 8 or 9.
-8. Every section complete — no truncation.
+    ABSOLUTE RULES:
+    1. Math: equation ${s.equation} must be consistent with all table values and exit ticket numbers. Verify before writing.
+    2. No placeholders: zero "TBD", "add here", "...", empty cells.
+    3. Source fidelity: all scenario/variable/equation/table values from source data above.
+    4. TWR stems: must use actual variable names — never generic.
+    5. [T4★]: must appear in both Teacher Moves AND Formative Check of same phase, ≥2 phases.
+    6. WIDA 3-band: every procedure phase, format "L1–2: … L3–4: … L5: …"
+    7. No student initials in sections 8 or 9.
+    8. Every section complete — no truncation.
 
-Output complete Markdown. Tables use | pipe | format.`;
-}
+    Output complete Markdown. Tables use | pipe | format.`;
+    }
 
-// ══════════════════════════════════════════════════════════════
-//  QA VALIDATOR — deterministic, structural
-// ══════════════════════════════════════════════════════════════
-function validateLP(lpText, session=1, extract=null) {
-  const issues  = [];
-  const warns   = [];
+    // ══════════════════════════════════════════════════════════════
+    //  QA VALIDATOR — deterministic, structural
+    // ══════════════════════════════════════════════════════════════
+    function validateLP(lpText, session=1, extract=null) {
+      const issues  = [];
+      const warns   = [];
 
-  // 1. Ordered section presence
-  const sectionHeaders = REQUIRED_SECTIONS.map(s => ({
-    name: s,
-    found: new RegExp('##\\s+(\\d+\\.\\s+)?'+s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i').test(lpText)
-  }));
-  const missingSec = sectionHeaders.filter(h=>!h.found).map(h=>h.name);
-  if (missingSec.length) issues.push(`Missing sections: ${missingSec.join(', ')}`);
+      // 1. Ordered section presence
+      const sectionHeaders = REQUIRED_SECTIONS.map(s => ({
+        name: s,
+        found: new RegExp('##\\s+(\\d+\\.\\s+)?'+s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i').test(lpText)
+      }));
+      const missingSec = sectionHeaders.filter(h=>!h.found).map(h=>h.name);
+      if (missingSec.length) issues.push(`Missing sections: ${missingSec.join(', ')}`);
 
-  // 2. Ordered section sequence check (catch reordering)
-  const foundIndices = sectionHeaders.filter(h=>h.found).map(h=>lpText.search(new RegExp('##\\s+(\\d+\\.\\s+)?'+h.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i')));
-  const inOrder = foundIndices.every((v,i,a) => i===0 || v>a[i-1]);
-  if (!inOrder) warns.push('Section order may be incorrect — verify document flow.');
+      // 2. Ordered section sequence check (catch reordering)
+      const foundIndices = sectionHeaders.filter(h=>h.found).map(h=>lpText.search(new RegExp('##\\s+(\\d+\\.\\s+)?'+h.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i')));
+      const inOrder = foundIndices.every((v,i,a) => i===0 || v>a[i-1]);
+      if (!inOrder) warns.push('Section order may be incorrect — verify document flow.');
 
-  // 3. [T4★] in ≥2 phases — verify appears in both Teacher Moves column AND Formative Check column
-  const tstarCount = (lpText.match(/\[T4★\]/g)||[]).length;
-  if (tstarCount < 2) issues.push(`[T4★] found only ${tstarCount} time(s) — minimum 2 required.`);
-  else if (tstarCount < 4) warns.push('[T4★] count low — verify it appears in both Teacher Moves AND Formative Check columns per phase.');
+      // 3. [T4★] in ≥2 phases — verify appears in both Teacher Moves column AND Formative Check column
+      const tstarCount = (lpText.match(/\[T4★\]/g)||[]).length;
+      if (tstarCount < 2) issues.push(`[T4★] found only ${tstarCount} time(s) — minimum 2 required.`);
+      else if (tstarCount < 4) warns.push('[T4★] count low — verify it appears in both Teacher Moves AND Formative Check columns per phase.');
 
-  // 4. WIDA 3-band in every phase (look for the pattern per phase — heuristic)
-  const wida3Re = /L1[–\-]2:.{5,}L3[–\-]4:.{5,}L5:/gi;
-  const widaMatches = (lpText.match(wida3Re)||[]).length;
-  const phaseCount  = State.blockLength==='90' ? 8 : 5;
-  if (widaMatches < Math.floor(phaseCount*0.6)) issues.push(`WIDA 3-band format found only ${widaMatches} time(s) — expected ~${phaseCount} (one per phase).`);
+      // 4. WIDA 3-band in every phase (look for the pattern per phase — heuristic)
+      const wida3Re = /L1[–\-]2:.{5,}L3[–\-]4:.{5,}L5:/gis; // <-- FIX: Added 's' flag for cross-newline matching
+      const widaMatches = (lpText.match(wida3Re)||[]).length;
+      const phaseCount  = State.blockLength==='90' ? 8 : 5;
+      if (widaMatches < Math.floor(phaseCount*0.6)) issues.push(`WIDA 3-band format found only ${widaMatches} time(s) — expected ~${phaseCount} (one per phase).`);
 
-  // 5. Each SPED student appears ≥2 times
-  const minAppear = State.blockLength==='90' ? 3 : 2;
-  SPED_STUDENTS.forEach(s => {
-    const count = (lpText.match(new RegExp(s.replace('.','\\.'),'g'))||[]).length;
-    if (count < 2) issues.push(`${s} appears only ${count} time(s) in SPED supports (min ${minAppear}).`);
-  });
+      // 5. Each SPED student appears ≥2 times
+      const minAppear = State.blockLength==='90' ? 3 : 2;
+      SPED_STUDENTS.forEach(s => {
+        const count = (lpText.match(new RegExp(s.replace(/\./g,'\\.'),'g'))||[]).length; // <-- FIX: Global replace for periods
+        if (count < 2) issues.push(`${s} appears only ${count} time(s) in SPED supports (min ${minAppear}).`);
+      });
 
-  // 6. No student initials in sections 8 or 9
-  const noteIdx = lpText.search(/##\s+\d*\.?\s*STUDENT NOTE SHEET/i);
-  const exitIdx = lpText.search(/##\s+\d*\.?\s*EXIT TICKET/i);
-  const iepIdx  = lpText.search(/##\s+\d*\.?\s*IEP/i);
-  if (noteIdx>0 && iepIdx>0) {
-    const studentFacing = lpText.slice(noteIdx, iepIdx>0?iepIdx:lpText.length);
-    SPED_STUDENTS.forEach(s => {
-      if (new RegExp(s.replace('.','\\.'),'g').test(studentFacing)) {
-        issues.push(`Student initials "${s}" found in student-facing section (8 or 9) — must be removed.`);
+      // 6. No student initials in sections 8 or 9
+      const noteIdx = lpText.search(/##\s+\d*\.?\s*STUDENT NOTE SHEET/i);
+      const exitIdx = lpText.search(/##\s+\d*\.?\s*EXIT TICKET/i);
+      const iepIdx  = lpText.search(/##\s+\d*\.?\s*IEP/i);
+      if (noteIdx>0 && iepIdx>0) {
+        const studentFacing = lpText.slice(noteIdx, iepIdx>0?iepIdx:lpText.length);
+        SPED_STUDENTS.forEach(s => {
+          if (new RegExp(s.replace(/\./g,'\\.'),'g').test(studentFacing)) { 
+            issues.push(`Student initials "${s}" found in student-facing section (8 or 9) — must be removed.`);
+          }
+        });
       }
-    });
-  }
 
-  // 7. Misconceptions ≥4 rows (count | separator rows in that section)
-  const miscIdx  = lpText.search(/##\s+\d*\.?\s*MISCONCEPTIONS/i);
-  const nextSecIdx = lpText.indexOf('##', miscIdx+5);
-  if (miscIdx>0) {
-    const miscBlock = lpText.slice(miscIdx, nextSecIdx>miscIdx ? nextSecIdx : lpText.length);
-    const miscRows  = (miscBlock.match(/\|[^|]+\|[^|]+\|[^|]+\|/g)||[]).length - 1; // -1 for header
-    if (miscRows < 4) warns.push(`Misconceptions table has ~${miscRows} rows — minimum 4 required.`);
-  }
-
-  // 8. Placeholder check — expanded
-  const placeholderRe = /\b(TBD|TODO|add here|placeholder|\[INSERT\]|FILL IN|COMING SOON)\b|\.{4,}/gi;
-  const placeholders  = lpText.match(placeholderRe)||[];
-  if (placeholders.length) issues.push(`Placeholder text found: ${[...new Set(placeholders)].join(', ')}`);
-
-  // 9. Math consistency (if extract provided)
-  if (extract) {
-    const sess = session===1 ? extract.session1 : extract.session2;
-    if (sess?.equation && !sess.equation.includes('[NOT FOUND]')) {
-      if (!lpText.includes(sess.equation.split('=')[1]?.trim()||'')) {
-        warns.push(`Equation "${sess.equation}" — verify consistent use throughout.`);
+      // 7. Misconceptions ≥4 rows (count | separator rows in that section)
+      const miscIdx  = lpText.search(/##\s+\d*\.?\s*MISCONCEPTIONS/i);
+      const nextSecIdx = lpText.indexOf('##', miscIdx+5);
+      if (miscIdx>0) {
+        const miscBlock = lpText.slice(miscIdx, nextSecIdx>miscIdx ? nextSecIdx : lpText.length);
+        const miscRows  = (miscBlock.match(/\|[^|]+\|[^|]+\|[^|]+\|/g)||[]).length - 1; // -1 for header
+        if (miscRows < 4) warns.push(`Misconceptions table has ~${miscRows} rows — minimum 4 required.`);
       }
-    }
-  }
 
-  return {
-    pass:     issues.length===0,
-    blocked:  issues.length>3,
-    issues,
-    warns,
-    missingSections: missingSec,
-    score: Math.max(0, 100 - issues.length*15 - warns.length*5),
-  };
-}
+      // 8. Placeholder check — expanded
+      const placeholderRe = /\b(TBD|TODO|add here|placeholder|\[INSERT\]|FILL IN|COMING SOON)\b|\.{4,}/gi;
+      const placeholders  = lpText.match(placeholderRe)||[];
+      if (placeholders.length) issues.push(`Placeholder text found: ${[...new Set(placeholders)].join(', ')}`);
 
-// ══════════════════════════════════════════════════════════════
-//  DOCX BUILDER
-// ══════════════════════════════════════════════════════════════
-// Strip illegal XML characters (control chars except tab/newline/CR)
-function sanitizeXml(s) {
-  return (s||'').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,'');
-}
-function escXml(s) {
-  return sanitizeXml(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&apos;');
-}
-
-function parseInlineRuns(text) {
-  const runs = []; let i=0, buf='';
-  while (i<text.length) {
-    if (text[i]==='*'&&text[i+1]==='*') {
-      if (buf) runs.push({t:buf}); buf=''; i+=2;
-      const e=text.indexOf('**',i);
-      runs.push({t:text.slice(i,e===-1?text.length:e), bold:true});
-      i=e===-1?text.length:e+2;
-    } else if (text[i]==='*'&&(i===0||text[i-1]===' '||text[i-1]==='\n')) {
-      if (buf) runs.push({t:buf}); buf=''; i++;
-      const e=text.indexOf('*',i);
-      runs.push({t:text.slice(i,e===-1?text.length:e), italic:true});
-      i=e===-1?text.length:e+1;
-    } else if (text[i]==='`') {
-      if (buf) runs.push({t:buf}); buf=''; i++;
-      const e=text.indexOf('`',i);
-      runs.push({t:text.slice(i,e===-1?text.length:e), mono:true});
-      i=e===-1?text.length:e+1;
-    } else { buf+=text[i++]; }
-  }
-  if (buf) runs.push({t:buf});
-  return runs;
-}
-
-function renderRuns(text, opts={}) {
-  const { color='242A30', sz=20 } = opts;
-  return parseInlineRuns(text).map(r => {
-    let rpr = `<w:color w:val="${color}"/><w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/>`;
-    if (r.bold) rpr += '<w:b/>';
-    if (r.italic) rpr += '<w:i/>';
-    if (r.mono) rpr += '<w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:cs="Courier New"/>';
-    return `<w:r><w:rPr>${rpr}</w:rPr><w:t xml:space="preserve">${escXml(r.t)}</w:t></w:r>`;
-  }).join('');
-}
-
-const wH1 = t => `<w:p><w:pPr><w:spacing w:before="320" w:after="100"/><w:pBdr><w:bottom w:val="single" w:sz="12" w:space="1" w:color="1C2E42"/></w:pBdr></w:pPr><w:r><w:rPr><w:b/><w:color w:val="1C2E42"/><w:sz w:val="34"/><w:szCs w:val="34"/></w:rPr><w:t xml:space="preserve">${escXml(t)}</w:t></w:r></w:p>\n`;
-const wH2 = t => `<w:p><w:pPr><w:spacing w:before="220" w:after="80"/><w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="387F84"/></w:pBdr></w:pPr><w:r><w:rPr><w:b/><w:color w:val="1C2E42"/><w:sz w:val="26"/><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">${escXml(t)}</w:t></w:r></w:p>\n`;
-const wH3 = t => `<w:p><w:pPr><w:spacing w:before="160" w:after="60"/></w:pPr><w:r><w:rPr><w:b/><w:color w:val="387F84"/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t xml:space="preserve">${escXml(t)}</w:t></w:r></w:p>\n`;
-const wPara = (inner, after=80) => `<w:p><w:pPr><w:spacing w:after="${after}"/></w:pPr>${inner}</w:p>\n`;
-const wEmpty= (after=60) => `<w:p><w:pPr><w:spacing w:after="${after}"/></w:pPr></w:p>\n`;
-const wPageBreak = () => `<w:p><w:r><w:br w:type="page"/></w:r></w:p>\n`;
-
-function buildTableXml(rows) {
-  if (!rows.length) return '';
-  const maxCols = Math.max(...rows.map(r=>r.length));
-  const colW = Math.floor(9100/Math.max(maxCols,1));
-  const borders = `<w:tblBorders>
-    <w:top    w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-    <w:left   w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-    <w:bottom w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-    <w:right  w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-    <w:insideH w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-    <w:insideV w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-  </w:tblBorders>`;
-  const grid = Array(maxCols).fill(`<w:gridCol w:w="${colW}"/>`).join('');
-
-  let xml = `<w:tbl><w:tblPr>
-    <w:tblStyle w:val="TableGrid"/><w:tblW w:w="9100" w:type="dxa"/>
-    <w:tblLayout w:type="fixed"/>
-    ${borders}
-    <w:tblCellMar>
-      <w:top w:w="80" w:type="dxa"/><w:left w:w="110" w:type="dxa"/>
-      <w:bottom w:w="80" w:type="dxa"/><w:right w:w="110" w:type="dxa"/>
-    </w:tblCellMar>
-  </w:tblPr><w:tblGrid>${grid}</w:tblGrid>\n`;
-
-  for (let ri=0; ri<rows.length; ri++) {
-    const isH = ri===0;
-    const fill = isH ? 'EAF2F7' : (ri%2===0?'FFFFFF':'F9FAFB');
-    xml += '<w:tr>';
-    if (isH) xml += '<w:trPr><w:tblHeader/></w:trPr>';
-    for (let ci=0; ci<maxCols; ci++) {
-      const cellText = rows[ri][ci]||'';
-      const runs = isH
-        ? `<w:r><w:rPr><w:b/><w:color w:val="1C2E42"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t xml:space="preserve">${escXml(cellText)}</w:t></w:r>`
-        : renderRuns(cellText, {color:'242A30',sz:18});
-      xml += `<w:tc><w:tcPr><w:tcW w:w="${colW}" w:type="dxa"/><w:shd w:val="clear" w:color="auto" w:fill="${fill}"/></w:tcPr><w:p><w:pPr><w:spacing w:after="40"/></w:pPr>${runs}</w:p></w:tc>`;
-    }
-    xml += '</w:tr>\n';
-  }
-  xml += '</w:tbl>\n';
-  return xml;
-}
-
-function parseMarkdownToDocxXml(md) {
-  const lines = md.split('\n');
-  let xml = ''; let i = 0;
-  while (i < lines.length) {
-    const line = lines[i];
-    if      (line.startsWith('# '))   { xml += wH1(line.slice(2).trim()); i++; continue; }
-    if      (line.startsWith('## '))  { xml += wH2(line.slice(3).trim()); i++; continue; }
-    if      (line.startsWith('### ')) { xml += wH3(line.slice(4).trim()); i++; continue; }
-    if      (line.startsWith('#### ')){ xml += wPara(renderRuns(line.slice(5).trim(),{color:'5C656E'}),60); i++; continue; }
-    if      (line.trimStart().startsWith('|')) {
-      const tLines = [];
-      while (i<lines.length && lines[i].trimStart().startsWith('|')) { tLines.push(lines[i]); i++; }
-      const rows = tLines
-        .filter(l => !/^\|[\s:|-]+\|$/.test(l.trim()))
-        .map(l => l.split('|').slice(1,-1).map(c=>c.trim()));
-      if (rows.length) { xml += buildTableXml(rows); xml += wEmpty(100); }
-      continue;
-    }
-    if (/^[-*]\s/.test(line)) {
-      while (i<lines.length && /^[-*]\s/.test(lines[i])) {
-        xml += `<w:p><w:pPr><w:spacing w:after="40"/><w:ind w:left="360" w:hanging="180"/></w:pPr>${renderRuns(lines[i].slice(2).trim())}</w:p>\n`;
-        i++;
+      // 9. Math consistency (if extract provided)
+      if (extract) {
+        const sess = session===1 ? extract.session1 : extract.session2;
+        if (sess?.equation && !sess.equation.includes('[NOT FOUND]')) {
+          if (!lpText.includes(sess.equation.split('=')[1]?.trim()||'')) {
+            warns.push(`Equation "${sess.equation}" — verify consistent use throughout.`);
+          }
+        }
       }
-      continue;
+
+      return {
+        pass:     issues.length===0,
+        blocked:  issues.length>3,
+        issues,
+        warns,
+        missingSections: missingSec,
+        score: Math.max(0, 100 - issues.length*15 - warns.length*5),
+      };
     }
-    if (/^\d+\.\s/.test(line)) {
-      while (i<lines.length && /^\d+\.\s/.test(lines[i])) {
-        xml += `<w:p><w:pPr><w:spacing w:after="40"/><w:ind w:left="360" w:hanging="180"/></w:pPr>${renderRuns(lines[i].replace(/^\d+\.\s/,'').trim())}</w:p>\n`;
-        i++;
+
+    // ══════════════════════════════════════════════════════════════
+    //  DOCX BUILDER
+    // ══════════════════════════════════════════════════════════════
+    // Strip illegal XML characters (control chars except tab/newline/CR)
+    function sanitizeXml(s) {
+      return (s||'').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,'');
+    }
+    function escXml(s) {
+      return sanitizeXml(s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+    }
+
+    function parseInlineRuns(text) {
+      const runs = []; let i=0, buf='';
+      while (i<text.length) {
+        if (text[i]==='*'&&text[i+1]==='*') {
+          if (buf) runs.push({t:buf}); buf=''; i+=2;
+          const e=text.indexOf('**',i);
+          runs.push({t:text.slice(i,e===-1?text.length:e), bold:true});
+          i=e===-1?text.length:e+2;
+        } else if (text[i]==='*'&&(i===0||text[i-1]===' '||text[i-1]==='\n')) {
+          if (buf) runs.push({t:buf}); buf=''; i++;
+          const e=text.indexOf('*',i);
+          runs.push({t:text.slice(i,e===-1?text.length:e), italic:true});
+          i=e===-1?text.length:e+1;
+        } else if (text[i]==='`') {
+          if (buf) runs.push({t:buf}); buf=''; i++;
+          const e=text.indexOf('`',i);
+          runs.push({t:text.slice(i,e===-1?text.length:e), mono:true});
+          i=e===-1?text.length:e+1;
+        } else { buf+=text[i++]; }
       }
-      continue;
+      if (buf) runs.push({t:buf});
+      return runs;
     }
-    if (/^[-=]{3,}$/.test(line.trim())) { xml += wEmpty(120); i++; continue; }
-    if (line.trim()==='') { xml += wEmpty(60); i++; continue; }
-    xml += wPara(renderRuns(line)); i++;
-  }
-  return xml;
-}
 
-function buildDocxBlob(markdownContent) {
-  const bodyXml = parseMarkdownToDocxXml(markdownContent);
-  const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document
-  xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
-  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
-  xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="wpc w14">
-<w:body>
-${bodyXml}
-<w:sectPr>
-  <w:pgSz w:w="12240" w:h="15840"/>
-  <w:pgMar w:top="1080" w:right="900" w:bottom="1080" w:left="900"/>
-  <w:pgNumType w:fmt="decimal"/>
-</w:sectPr>
-</w:body>
-</w:document>`;
-
-  const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-<w:docDefaults>
-  <w:rPrDefault><w:rPr>
-    <w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/>
-    <w:sz w:val="22"/><w:szCs w:val="22"/><w:color w:val="242A30"/>
-  </w:rPr></w:rPrDefault>
-  <w:pPrDefault><w:pPr><w:spacing w:after="80"/></w:pPr></w:pPrDefault>
-</w:docDefaults>
-<w:style w:type="paragraph" w:styleId="Normal" w:default="1">
-  <w:name w:val="Normal"/>
-  <w:pPr><w:spacing w:after="80"/></w:pPr>
-  <w:rPr>
-    <w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/>
-    <w:sz w:val="22"/><w:szCs w:val="22"/>
-    <w:color w:val="242A30"/>
-  </w:rPr>
-</w:style>
-<w:style w:type="table" w:styleId="TableGrid">
-  <w:name w:val="Table Grid"/>
-  <w:tblPr>
-    <w:tblBorder>
-      <w:top    w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-      <w:left   w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-      <w:bottom w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-      <w:right  w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-      <w:insideH w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-      <w:insideV w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
-    </w:tblBorder>
-  </w:tblPr>
-  <w:rPr><w:sz w:val="20"/></w:rPr>
-</w:style>
-</w:styles>`;
-
-  const settingsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-  <w:defaultTabStop w:val="720"/>
-</w:settings>`;
-
-  const zip = new JSZip();
-  zip.file('[Content_Types].xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/></Types>`);
-  zip.file('_rels/.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`);
-  zip.file('word/document.xml', docXml);
-  zip.file('word/styles.xml',   stylesXml);
-  zip.file('word/settings.xml', settingsXml);
-  zip.file('word/_rels/document.xml.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/></Relationships>`);
-  return zip.generateAsync({ type:'blob', mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document', compression:'DEFLATE', compressionOptions:{level:6} });
-}
-
-// ══════════════════════════════════════════════════════════════
-//  PIPELINE ENTRY POINT
-// ══════════════════════════════════════════════════════════════
-async function handleGenerate() {
-  clearFieldErr('err-file'); clearFieldErr('err-key');
-
-  // Preflight: JSZip must be loaded from CDN
-  if (typeof JSZip === 'undefined') {
-    showFieldErr('err-file', 'JSZip library failed to load. Check your internet connection and reload the page.');
-    return;
-  }
-
-  let valid = true;
-  if (!State.uploadedFile) { showFieldErr('err-file','Please upload a .pptx file.'); valid=false; }
-  const key = document.getElementById('api-key').value.trim();
-  if (!key) { showFieldErr('err-key','Please enter your Anthropic API key.'); valid=false; }
-  else if (!key.startsWith('sk-ant-')) { showFieldErr('err-key','API key must start with sk-ant- (found: ' + key.slice(0,8) + '…). Check Claude.ai → Account Settings → API Keys.'); valid=false; }
-  if (!valid) return;
-
-  // Store key
-  State.apiKey     = key;
-  State.dateVal    = document.getElementById('lesson-date').value;
-  State.dateStr    = State.dateVal
-    ? new Date(State.dateVal+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
-    : new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  State.unitLesson = document.getElementById('unit-lesson').value.trim();
-
-  try { sessionStorage.setItem(SS_KEY, key); } catch(_) {}
-  if (document.getElementById('persist-key').checked) {
-    try { localStorage.setItem(LS_KEY, key); } catch(_) {}
-  } else {
-    try { localStorage.removeItem(LS_KEY); } catch(_) {}
-  }
-
-  resetState(true);
-  lockInputs(true);
-
-  // Clear log and reset stages before showing progress UI
-  const _li=document.getElementById('log-inner'); while(_li&&_li.firstChild) _li.removeChild(_li.firstChild);
-  STAGES.forEach(s=>setStage(s.id,'wait'));
-  setProgress(0);
-  showSection('progress'); // Show progress UI now — all state is ready
-
-  try {
-    // ─── STAGE: EXTRACT ───────────────────────────────────────
-    State.currentStage = 'extract';
-    setStage('extract','run');
-    log('Reading PPTX…','info');
-    const { text: slideText, slideCount } = await extractPptxContent(State.uploadedFile);
-    log(`${slideCount} slides parsed.`);
-
-    log('Sending to Claude for structured extraction…','info');
-    const rawText = await apiCall(EXTRACT_SYSTEM, `PPTX content (${slideCount} slides):\n\n${slideText}\n\nReturn JSON only.`, 4000);
-    let ext;
-    try {
-      ext = JSON.parse(rawText.replace(/```json|```/g,'').trim());
-    } catch(_) {
-      const m = rawText.match(/\{[\s\S]+\}/);
-      if (m) { try { ext = JSON.parse(m[0]); } catch(e2) { throw new Error('Could not parse extraction JSON. Check PPTX has readable text content.'); } }
-      else throw new Error('Claude did not return valid JSON during extraction.');
+    function renderRuns(text, opts={}) {
+      const { color='242A30', sz=20 } = opts;
+      return parseInlineRuns(text).map(r => {
+        let rpr = `<w:color w:val="${color}"/><w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/>`;
+        if (r.bold) rpr += '<w:b/>';
+        if (r.italic) rpr += '<w:i/>';
+        if (r.mono) rpr += '<w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:cs="Courier New"/>';
+        return `<w:r><w:rPr>${rpr}</w:rPr><w:t xml:space="preserve">${escXml(r.t)}</w:t></w:r>`;
+      }).join('');
     }
-    State.rawExtract = ext;
-    log(`Extracted: ${ext.standard||'standard n/a'} — S1:"${ext.session1?.context}" S2:"${ext.session2?.context}"`, 'ok');
-    setStage('extract','ok',`${slideCount} slides`);
-    setProgress(1);
 
-    // Show review panel — pause pipeline here
-    buildReviewPanel(ext);
-    showSection('review');
-    lockInputs(false);
+    const wH1 = t => `<w:p><w:pPr><w:spacing w:before="320" w:after="100"/><w:pBdr><w:bottom w:val="single" w:sz="12" w:space="1" w:color="1C2E42"/></w:pBdr></w:pPr><w:r><w:rPr><w:b/><w:color w:val="1C2E42"/><w:sz w:val="34"/><w:szCs w:val="34"/></w:rPr><w:t xml:space="preserve">${escXml(t)}</w:t></w:r></w:p>\n`;
+    const wH2 = t => `<w:p><w:pPr><w:spacing w:before="220" w:after="80"/><w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="387F84"/></w:pBdr></w:pPr><w:r><w:rPr><w:b/><w:color w:val="1C2E42"/><w:sz w:val="26"/><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">${escXml(t)}</w:t></w:r></w:p>\n`;
+    const wH3 = t => `<w:p><w:pPr><w:spacing w:before="160" w:after="60"/></w:pPr><w:r><w:rPr><w:b/><w:color w:val="387F84"/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t xml:space="preserve">${escXml(t)}</w:t></w:r></w:p>\n`;
+    const wPara = (inner, after=80) => `<w:p><w:pPr><w:spacing w:after="${after}"/></w:pPr>${inner}</w:p>\n`;
+    const wEmpty= (after=60) => `<w:p><w:pPr><w:spacing w:after="${after}"/></w:pPr></w:p>\n`;
+    const wPageBreak = () => `<w:p><w:r><w:br w:type="page"/></w:r></w:p>\n`;
 
-  } catch(e) {
-    lockInputs(false);
-    handlePipelineError(e);
-  }
-}
+    function buildTableXml(rows) {
+      if (!rows.length) return '';
+      const maxCols = Math.max(...rows.map(r=>r.length));
+      const colW = Math.floor(9100/Math.max(maxCols,1));
+      const borders = `<w:tblBorders>
+        <w:top    w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+        <w:left   w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+        <w:bottom w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+        <w:right  w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+        <w:insideH w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+        <w:insideV w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+      </w:tblBorders>`;
+      const grid = Array(maxCols).fill(`<w:gridCol w:w="${colW}"/>`).join('');
 
-// Called when user confirms review panel
-async function proceedToGeneration() {
-  if (!State.rawExtract) return;
+      let xml = `<w:tbl><w:tblPr>
+        <w:tblStyle w:val="TableGrid"/><w:tblW w:w="9100" w:type="dxa"/>
+        <w:tblLayout w:type="fixed"/>
+        ${borders}
+        <w:tblCellMar>
+          <w:top w:w="80" w:type="dxa"/><w:left w:w="110" w:type="dxa"/>
+          <w:bottom w:w="80" w:type="dxa"/><w:right w:w="110" w:type="dxa"/>
+        </w:tblCellMar>
+      </w:tblPr><w:tblGrid>${grid}</w:tblGrid>\n`;
 
-  // Re-read all volatile state from DOM — safe whether called fresh or via resume
-  const keyVal = document.getElementById('api-key').value.trim();
-  if (keyVal) State.apiKey = keyVal;
-  if (!State.apiKey) { showErr('API key is required. Enter it and retry.'); return; }
+      for (let ri=0; ri<rows.length; ri++) {
+        const isH = ri===0;
+        const fill = isH ? 'EAF2F7' : (ri%2===0?'FFFFFF':'F9FAFB');
+        xml += '<w:tr>';
+        if (isH) xml += '<w:trPr><w:tblHeader/></w:trPr>';
+        for (let ci=0; ci<maxCols; ci++) {
+          const cellText = rows[ri][ci]||'';
+          const runs = isH
+            ? `<w:r><w:rPr><w:b/><w:color w:val="1C2E42"/><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t xml:space="preserve">${escXml(cellText)}</w:t></w:r>`
+            : renderRuns(cellText, {color:'242A30',sz:18});
+          xml += `<w:tc><w:tcPr><w:tcW w:w="${colW}" w:type="dxa"/><w:shd w:val="clear" w:color="auto" w:fill="${fill}"/></w:tcPr><w:p><w:pPr><w:spacing w:after="40"/></w:pPr>${runs}</w:p></w:tc>`;
+        }
+        xml += '</w:tr>\n';
+      }
+      xml += '</w:tbl>\n';
+      return xml;
+    }
 
-  // Re-read date/block/unit in case user changed them before confirming
-  const dv = document.getElementById('lesson-date').value;
-  if (dv) {
-    State.dateVal = dv;
-    State.dateStr = new Date(dv+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  }
-  if (!State.dateStr) {
-    State.dateStr = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  }
-  State.unitLesson  = document.getElementById('unit-lesson').value.trim() || State.unitLesson;
-  State.blockLength = document.querySelector('input[name="block"]:checked')?.value || State.blockLength || '90';
+    function parseMarkdownToDocxXml(md) {
+      const lines = md.split('\n');
+      let xml = ''; let i = 0;
+      while (i < lines.length) {
+        const line = lines[i];
+        if      (line.startsWith('# '))   { xml += wH1(line.slice(2).trim()); i++; continue; }
+        if      (line.startsWith('## '))  { xml += wH2(line.slice(3).trim()); i++; continue; }
+        if      (line.startsWith('### ')) { xml += wH3(line.slice(4).trim()); i++; continue; }
+        if      (line.startsWith('#### ')){ xml += wPara(renderRuns(line.slice(5).trim(),{color:'5C656E'}),60); i++; continue; }
+        if      (line.trimStart().startsWith('|')) {
+          const tLines = [];
+          while (i<lines.length && lines[i].trimStart().startsWith('|')) { tLines.push(lines[i]); i++; }
+          const rows = tLines
+            .filter(l => !/^\|[\s:|-]+\|$/.test(l.trim()))
+            .map(l => l.split('|').slice(1,-1).map(c=>c.trim()));
+          if (rows.length) { xml += buildTableXml(rows); xml += wEmpty(100); }
+          continue;
+        }
+        if (/^[-*]\s/.test(line)) {
+          while (i<lines.length && /^[-*]\s/.test(lines[i])) {
+            xml += `<w:p><w:pPr><w:spacing w:after="40"/><w:ind w:left="360" w:hanging="180"/></w:pPr>${renderRuns(lines[i].slice(2).trim())}</w:p>\n`;
+            i++;
+          }
+          continue;
+        }
+        if (/^\d+\.\s/.test(line)) {
+          while (i<lines.length && /^\d+\.\s/.test(lines[i])) {
+            xml += `<w:p><w:pPr><w:spacing w:after="40"/><w:ind w:left="360" w:hanging="180"/></w:pPr>${renderRuns(lines[i].replace(/^\d+\.\s/,'').trim())}</w:p>\n`;
+            i++;
+          }
+          continue;
+        }
+        if (/^[-=]{3,}$/.test(line.trim())) { xml += wEmpty(120); i++; continue; }
+        if (line.trim()==='') { xml += wEmpty(60); i++; continue; }
+        xml += wPara(renderRuns(line)); i++;
+      }
+      return xml;
+    }
 
-  // Read user-edited review values
-  State.extract = readReviewValues(State.rawExtract);
+    function buildDocxBlob(markdownContent) {
+      const bodyXml = parseMarkdownToDocxXml(markdownContent);
+      const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <w:document
+      xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
+      xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+      xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+      xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="wpc w14">
+    <w:body>
+    ${bodyXml}
+    <w:sectPr>
+      <w:pgSz w:w="12240" w:h="15840"/>
+      <w:pgMar w:top="1080" w:right="900" w:bottom="1080" w:left="900"/>
+      <w:pgNumType w:fmt="decimal"/>
+    </w:sectPr>
+    </w:body>
+    </w:document>`;
 
-  showSection('progress');
-  lockInputs(true);
-  setStage('extract','ok'); // already done
-  setProgress(1);
-  State.cancelled = false;
+      const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+    <w:docDefaults>
+      <w:rPrDefault><w:rPr>
+        <w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/>
+        <w:sz w:val="22"/><w:szCs w:val="22"/><w:color w:val="242A30"/>
+      </w:rPr></w:rPrDefault>
+      <w:pPrDefault><w:pPr><w:spacing w:after="80"/></w:pPr></w:pPrDefault>
+    </w:docDefaults>
+    <w:style w:type="paragraph" w:styleId="Normal" w:default="1">
+      <w:name w:val="Normal"/>
+      <w:pPr><w:spacing w:after="80"/></w:pPr>
+      <w:rPr>
+        <w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/>
+        <w:sz w:val="22"/><w:szCs w:val="22"/>
+        <w:color w:val="242A30"/>
+      </w:rPr>
+    </w:style>
+    <w:style w:type="table" w:styleId="TableGrid">
+      <w:name w:val="Table Grid"/>
+      <w:tblPr>
+        <w:tblBorder>
+          <w:top    w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+          <w:left   w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+          <w:bottom w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+          <w:right  w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+          <w:insideH w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+          <w:insideV w:val="single" w:sz="4" w:space="0" w:color="D6DBDF"/>
+        </w:tblBorder>
+      </w:tblPr>
+      <w:rPr><w:sz w:val="20"/></w:rPr>
+    </w:style>
+    </w:styles>`;
 
-  try {
-    // ─── STAGE: GENERATE ─────────────────────────────────────
-    State.currentStage = 'generate';
-    setStage('generate','run');
-    const ext = State.extract;
+      const settingsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+      <w:defaultTabStop w:val="720"/>
+    </w:settings>`;
 
-    log('Generating Session 1 lesson plan…','info');
-    const s1sys = 'Generate a complete, deployment-ready Grade 6 Math lesson plan in Markdown only. No preamble, no sign-off — output begins with # header.';
-    State.s1Raw = await apiCall(s1sys, buildLPPrompt(1, ext), 8000);
-    if (State.s1Raw.length < 1000) throw new Error('Session 1 response too short (' + State.s1Raw.length + ' chars) — likely a model error or truncation. Retry.');
-    log('S1: ' + (State.s1Raw.length/1024).toFixed(0) + ' KB','ok');
+      const zip = new JSZip();
+      zip.file('[Content_Types].xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/></Types>`);
+      zip.file('_rels/.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`);
+      zip.file('word/document.xml', docXml);
+      zip.file('word/styles.xml',   stylesXml);
+      zip.file('word/settings.xml', settingsXml);
+      zip.file('word/_rels/document.xml.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/></Relationships>`);
+      return zip.generateAsync({ type:'blob', mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document', compression:'DEFLATE', compressionOptions:{level:6} });
+    }
 
-    if (State.cancelled) throw new Error('Cancelled');
+    // ══════════════════════════════════════════════════════════════
+    //  PIPELINE ENTRY POINT
+    // ══════════════════════════════════════════════════════════════
+    async function handleGenerate() {
+      clearFieldErr('err-file'); clearFieldErr('err-key');
 
-    const s1Summary = `S1 scenario:"${ext.session1?.context}" IV:"${ext.session1?.iv_name}" DV:"${ext.session1?.dv_name}" Eq:"${ext.session1?.equation}" Obj:"${ext.session1?.contentObjective}"`;
-    log('Generating Session 2 lesson plan…','info');
-    State.s2Raw = await apiCall(s1sys, buildLPPrompt(2, ext, s1Summary), 8000);
-    if (State.s2Raw.length < 1000) throw new Error('Session 2 response too short (' + State.s2Raw.length + ' chars) — likely a model error or truncation. Retry.');
-    log('S2: ' + (State.s2Raw.length/1024).toFixed(0) + ' KB','ok');
+      // Preflight: JSZip must be loaded from CDN
+      if (typeof JSZip === 'undefined') {
+        showFieldErr('err-file', 'JSZip library failed to load. Check your internet connection and reload the page.');
+        return;
+      }
 
-    // Auto-retry if critical sections missing
-    for (const [sess, raw, setRaw] of [[1,State.s1Raw,'s1Raw'],[2,State.s2Raw,'s2Raw']]) {
-      const qr = validateLP(raw, sess, ext);
-      if (qr.missingSections.length > 2) {
-        log(`S${sess} missing sections: ${qr.missingSections.join(', ')} — retrying…`,'warn');
-        const retry = await apiCall(s1sys, buildLPPrompt(sess, ext, sess===2?s1Summary:'') + `\n\nPRIOR ATTEMPT MISSING: ${qr.missingSections.join(', ')}. You MUST include ALL 10 sections.`, 8000);
-        if (sess===1) State.s1Raw=retry; else State.s2Raw=retry;
-        log(`S${sess} retry complete.`,'ok');
+      let valid = true;
+      if (!State.uploadedFile) { showFieldErr('err-file','Please upload a .pptx file.'); valid=false; }
+      const key = document.getElementById('api-key').value.trim();
+      if (!key) { showFieldErr('err-key','Please enter your Anthropic API key.'); valid=false; }
+      else if (!key.startsWith('sk-ant-')) { showFieldErr('err-key','API key must start with sk-ant- (found: ' + key.slice(0,8) + '…). Check Claude.ai → Account Settings → API Keys.'); valid=false; }
+      if (!valid) return;
+
+      // Store key
+      State.apiKey     = key;
+      State.dateVal    = document.getElementById('lesson-date').value;
+      State.dateStr    = State.dateVal
+        ? new Date(State.dateVal+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
+        : new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+      State.unitLesson = document.getElementById('unit-lesson').value.trim();
+
+      try { sessionStorage.setItem(SS_KEY, key); } catch(_) {}
+      if (document.getElementById('persist-key').checked) {
+        try { localStorage.setItem(LS_KEY, key); } catch(_) {}
+      } else {
+        try { localStorage.removeItem(LS_KEY); } catch(_) {}
+      }
+
+      resetState(true);
+      lockInputs(true);
+
+      // Clear log and reset stages before showing progress UI
+      const _li=document.getElementById('log-inner'); while(_li&&_li.firstChild) _li.removeChild(_li.firstChild);
+      STAGES.forEach(s=>setStage(s.id,'wait'));
+      setProgress(0);
+      showSection('progress'); // Show progress UI now — all state is ready
+
+      try {
+        // ─── STAGE: EXTRACT ───────────────────────────────────────
+        State.currentStage = 'extract';
+        setStage('extract','run');
+        log('Reading PPTX…','info');
+        const { text: slideText, slideCount } = await extractPptxContent(State.uploadedFile);
+        log(`${slideCount} slides parsed.`);
+
+        log('Sending to Claude for structured extraction…','info');
+        const rawText = await apiCall(EXTRACT_SYSTEM, `PPTX content (${slideCount} slides):\n\n${slideText}\n\nReturn JSON only.`, 4000);
+        let ext;
+        try {
+          ext = JSON.parse(rawText.replace(/```json|```/g,'').trim());
+        } catch(_) {
+          const m = rawText.match(/\{[\s\S]+\}/);
+          if (m) { try { ext = JSON.parse(m[0]); } catch(e2) { throw new Error('Could not parse extraction JSON. Check PPTX has readable text content.'); } }
+          else throw new Error('Claude did not return valid JSON during extraction.');
+        }
+        State.rawExtract = ext;
+        log(`Extracted: ${ext.standard||'standard n/a'} — S1:"${ext.session1?.context}" S2:"${ext.session2?.context}"`, 'ok');
+        setStage('extract','ok',`${slideCount} slides`);
+        setProgress(1);
+
+        // Show review panel — pause pipeline here
+        buildReviewPanel(ext);
+        showSection('review');
+        lockInputs(false);
+
+      } catch(e) {
+        lockInputs(false);
+        handlePipelineError(e);
       }
     }
 
-    setStage('generate','ok');
-    setProgress(2);
+    // Called when user confirms review panel
+    async function proceedToGeneration() {
+      if (!State.rawExtract) return;
 
-    // ─── STAGE: QA ───────────────────────────────────────────
-    State.currentStage = 'qa';
-    setStage('qa','run');
-    log('Running QA audit…','info');
-    const qa1 = validateLP(State.s1Raw, 1, ext);
-    const qa2 = validateLP(State.s2Raw, 2, ext);
-    const allIssues = [...qa1.issues.map(i=>'S1: '+i), ...qa2.issues.map(i=>'S2: '+i)];
-    const allWarns  = [...qa1.warns .map(w=>'S1: '+w), ...qa2.warns .map(w=>'S2: '+w)];
-    allIssues.forEach(i => log(i,'warn'));
-    allWarns .forEach(w => log(w,'warn'));
-    const qaBlocked = qa1.blocked || qa2.blocked;
-    if (!allIssues.length && !allWarns.length) log('QA: PASS — both plans deployment-ready.','ok');
-    setStage('qa', qaBlocked?'fail':'ok', allIssues.length?`${allIssues.length} issues`:'PASS');
-    setProgress(3);
+      // Re-read all volatile state from DOM — safe whether called fresh or via resume
+      const keyVal = document.getElementById('api-key').value.trim();
+      if (keyVal) State.apiKey = keyVal;
+      if (!State.apiKey) { showErr('API key is required. Enter it and retry.'); return; }
 
-    if (qaBlocked) {
-      throw new Error(`QA blocked export: ${allIssues.slice(0,3).join(' | ')}${allIssues.length>3?` (+${allIssues.length-3} more)`:''}`);
+      // Re-read date/block/unit in case user changed them before confirming
+      const dv = document.getElementById('lesson-date').value;
+      if (dv) {
+        State.dateVal = dv;
+        State.dateStr = new Date(dv+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+      }
+      if (!State.dateStr) {
+        State.dateStr = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+      }
+      State.unitLesson  = document.getElementById('unit-lesson').value.trim() || State.unitLesson;
+      State.blockLength = document.querySelector('input[name="block"]:checked')?.value || State.blockLength || '90';
+
+      // Read user-edited review values
+      State.extract = readReviewValues(State.rawExtract);
+
+      showSection('progress');
+      lockInputs(true);
+      setStage('extract','ok'); // already done
+      setProgress(1);
+      State.cancelled = false;
+
+      try {
+        // ─── STAGE: GENERATE ─────────────────────────────────────
+        State.currentStage = 'generate';
+        setStage('generate','run');
+        const ext = State.extract;
+
+        log('Generating Session 1 lesson plan…','info');
+        const s1sys = 'Generate a complete, deployment-ready Grade 6 Math lesson plan in Markdown only. No preamble, no sign-off — output begins with # header.';
+        State.s1Raw = await apiCall(s1sys, buildLPPrompt(1, ext), 8000);
+        if (State.s1Raw.length < 1000) throw new Error('Session 1 response too short (' + State.s1Raw.length + ' chars) — likely a model error or truncation. Retry.');
+        log('S1: ' + (State.s1Raw.length/1024).toFixed(0) + ' KB','ok');
+
+        if (State.cancelled) throw new Error('Cancelled');
+
+        const s1Summary = `S1 scenario:"${ext.session1?.context}" IV:"${ext.session1?.iv_name}" DV:"${ext.session1?.dv_name}" Eq:"${ext.session1?.equation}" Obj:"${ext.session1?.contentObjective}"`;
+        log('Generating Session 2 lesson plan…','info');
+        State.s2Raw = await apiCall(s1sys, buildLPPrompt(2, ext, s1Summary), 8000);
+        if (State.s2Raw.length < 1000) throw new Error('Session 2 response too short (' + State.s2Raw.length + ' chars) — likely a model error or truncation. Retry.');
+        log('S2: ' + (State.s2Raw.length/1024).toFixed(0) + ' KB','ok');
+
+        // Auto-retry if critical sections missing
+        for (const [sess, raw, setRaw] of [[1,State.s1Raw,'s1Raw'],[2,State.s2Raw,'s2Raw']]) {
+          const qr = validateLP(raw, sess, ext);
+          if (qr.missingSections.length > 2) {
+            log(`S${sess} missing sections: ${qr.missingSections.join(', ')} — retrying…`,'warn');
+            const retry = await apiCall(s1sys, buildLPPrompt(sess, ext, sess===2?s1Summary:'') + `\n\nPRIOR ATTEMPT MISSING: ${qr.missingSections.join(', ')}. You MUST include ALL 10 sections.`, 8000);
+            if (sess===1) State.s1Raw=retry; else State.s2Raw=retry;
+            log(`S${sess} retry complete.`,'ok');
+          }
+        }
+
+        setStage('generate','ok');
+        setProgress(2);
+
+        // ─── STAGE: QA ───────────────────────────────────────────
+        State.currentStage = 'qa';
+        setStage('qa','run');
+        log('Running QA audit…','info');
+        const qa1 = validateLP(State.s1Raw, 1, ext);
+        const qa2 = validateLP(State.s2Raw, 2, ext);
+        const allIssues = [...qa1.issues.map(i=>'S1: '+i), ...qa2.issues.map(i=>'S2: '+i)];
+        const allWarns  = [...qa1.warns .map(w=>'S1: '+w), ...qa2.warns .map(w=>'S2: '+w)];
+        allIssues.forEach(i => log(i,'warn'));
+        allWarns .forEach(w => log(w,'warn'));
+        const qaBlocked = qa1.blocked || qa2.blocked;
+        if (!allIssues.length && !allWarns.length) log('QA: PASS — both plans deployment-ready.','ok');
+        setStage('qa', qaBlocked?'fail':'ok', allIssues.length?`${allIssues.length} issues`:'PASS');
+        setProgress(3);
+
+        if (qaBlocked) {
+          throw new Error(`QA blocked export: ${allIssues.slice(0,3).join(' | ')}${allIssues.length>3?` (+${allIssues.length-3} more)`:''}`);
+        }
+
+        // ─── STAGE: DOCX ─────────────────────────────────────────
+        State.currentStage = 'docx';
+        setStage('docx','run');
+        log('Compiling .docx files…','info');
+        if (!State.s1Raw || State.s1Raw.length < 500) throw new Error('Session 1 content is missing or too short — generation may have been truncated. Retry.');
+        if (!State.s2Raw || State.s2Raw.length < 500) throw new Error('Session 2 content is missing or too short — generation may have been truncated. Retry.');
+        const slug     = ((State.unitLesson||'Lesson').replace(/[^\w]+/g,'_')||'Lesson').slice(0,30);
+        const dateSlug = State.dateVal ? State.dateVal.replace(/-/g,'') : 'date';
+        const [b1, b2] = await Promise.all([buildDocxBlob(State.s1Raw), buildDocxBlob(State.s2Raw)]);
+        State.generatedFiles = [
+          { name:`LP_${slug}_S1_${dateSlug}_NeftAlba.docx`, blob:b1, label:'Session 1 — Lesson Plan', size:b1.size },
+          { name:`LP_${slug}_S2_${dateSlug}_NeftAlba.docx`, blob:b2, label:'Session 2 — Lesson Plan', size:b2.size },
+        ];
+        log('Both .docx files ready.','ok');
+        setStage('docx','ok');
+        setProgress(4);
+
+        showResults(allIssues, allWarns);
+
+      } catch(e) {
+        lockInputs(false);
+        handlePipelineError(e);
+      }
     }
 
-    // ─── STAGE: DOCX ─────────────────────────────────────────
-    State.currentStage = 'docx';
-    setStage('docx','run');
-    log('Compiling .docx files…','info');
-    if (!State.s1Raw || State.s1Raw.length < 500) throw new Error('Session 1 content is missing or too short — generation may have been truncated. Retry.');
-    if (!State.s2Raw || State.s2Raw.length < 500) throw new Error('Session 2 content is missing or too short — generation may have been truncated. Retry.');
-    const slug     = ((State.unitLesson||'Lesson').replace(/[^\w]+/g,'_')||'Lesson').slice(0,30);
-    const dateSlug = State.dateVal ? State.dateVal.replace(/-/g,'') : 'date';
-    const [b1, b2] = await Promise.all([buildDocxBlob(State.s1Raw), buildDocxBlob(State.s2Raw)]);
-    State.generatedFiles = [
-      { name:`LP_${slug}_S1_${dateSlug}_NeftAlba.docx`, blob:b1, label:'Session 1 — Lesson Plan', size:b1.size },
-      { name:`LP_${slug}_S2_${dateSlug}_NeftAlba.docx`, blob:b2, label:'Session 2 — Lesson Plan', size:b2.size },
-    ];
-    log('Both .docx files ready.','ok');
-    setStage('docx','ok');
-    setProgress(4);
+    // ══════════════════════════════════════════════════════════════
+    //  ERROR HANDLING
+    // ══════════════════════════════════════════════════════════════
+    function handlePipelineError(e) {
+      const friendly = e.message.startsWith('Cancelled')
+        ? 'Generation was cancelled.'
+        : e.message.includes('API key') ? e.message
+        : e.message.includes('timed out') ? e.message
+        : `Something went wrong during the ${State.currentStage||'generation'} stage. See details below.`;
+      STAGES.forEach(s => {
+        if (document.getElementById('icon-'+s.id)?.classList.contains('run')) setStage(s.id,'fail');
+      });
+      showErr(friendly, e.stack||e.message, State.cancelled);
+    }
 
-    showResults(allIssues, allWarns);
+    async function resumeFromCheckpoint() {
+      document.getElementById('error-section').style.display='none';
+      State.cancelled = false;
+      // If extraction done and extract confirmed, go straight to generation
+      if (State.extract && State.currentStage !== 'extract') {
+        showSection('progress');
+        lockInputs(true);
+        // Reset failed/running stages to waiting before retry
+        STAGES.forEach(s => {
+          const icon = document.getElementById('icon-'+s.id);
+          if (icon?.classList.contains('fail') || icon?.classList.contains('run')) setStage(s.id,'wait');
+        });
+        setProgress(1); // extraction already done
+        document.getElementById('log-inner') && (()=>{ const l=document.getElementById('log-inner'); while(l.firstChild) l.removeChild(l.firstChild); })();
+        log('Resuming from checkpoint after extraction…','info');
+        await proceedToGeneration();
+      } else {
+        // Re-run from scratch
+        fullReset();
+      }
+    }
 
-  } catch(e) {
-    lockInputs(false);
-    handlePipelineError(e);
-  }
-}
+    // ══════════════════════════════════════════════════════════════
+    //  RESULTS
+    // ══════════════════════════════════════════════════════════════
+    function showResults(issues=[], warns=[]) {
+      showSection('results');
+      lockInputs(false);
 
-// ══════════════════════════════════════════════════════════════
-//  ERROR HANDLING
-// ══════════════════════════════════════════════════════════════
-function handlePipelineError(e) {
-  const friendly = e.message.startsWith('Cancelled')
-    ? 'Generation was cancelled.'
-    : e.message.includes('API key') ? e.message
-    : e.message.includes('timed out') ? e.message
-    : `Something went wrong during the ${State.currentStage||'generation'} stage. See details below.`;
-  STAGES.forEach(s => {
-    if (document.getElementById('icon-'+s.id)?.classList.contains('run')) setStage(s.id,'fail');
-  });
-  showErr(friendly, e.stack||e.message, State.cancelled);
-}
+      // Meta — safe text
+      const metaEl = document.getElementById('results-meta');
+      metaEl.textContent = `${State.unitLesson ? State.unitLesson+' · ' : ''}${State.dateStr} · ${State.blockLength}-min block`;
 
-async function resumeFromCheckpoint() {
-  document.getElementById('error-section').style.display='none';
-  State.cancelled = false;
-  // If extraction done and extract confirmed, go straight to generation
-  if (State.extract && State.currentStage !== 'extract') {
-    showSection('progress');
-    lockInputs(true);
-    // Reset failed/running stages to waiting before retry
-    STAGES.forEach(s => {
-      const icon = document.getElementById('icon-'+s.id);
-      if (icon?.classList.contains('fail') || icon?.classList.contains('run')) setStage(s.id,'wait');
-    });
-    setProgress(1); // extraction already done
-    document.getElementById('log-inner') && (()=>{ const l=document.getElementById('log-inner'); while(l.firstChild) l.removeChild(l.firstChild); })();
-    log('Resuming from checkpoint after extraction…','info');
-    await proceedToGeneration();
-  } else {
-    // Re-run from scratch
-    fullReset();
-  }
-}
+      // QA banner — DOM only, no innerHTML for issue strings
+      const banner = document.getElementById('qa-banner');
+      while (banner.firstChild) banner.removeChild(banner.firstChild);
+      if (!issues.length && !warns.length) {
+        banner.className = 'qa-banner pass';
+        const msg = document.createElement('span');
+        msg.textContent = '✓ All QA checks passed — both lesson plans are deployment-ready.';
+        banner.appendChild(msg);
+      } else {
+        banner.className = issues.length ? 'qa-banner fail' : 'qa-banner warn';
+        const icon = document.createElement('span'); icon.textContent = issues.length ? '⚠ ' : '⚠ ';
+        const head = document.createElement('strong');
+        head.textContent = issues.length ? `${issues.length} QA issue(s) — review before distributing:` : `${warns.length} warning(s):`;
+        banner.append(icon, head);
+        const list = document.createElement('ul'); list.className='qa-warn-list';
+        [...issues.slice(0,5), ...warns.slice(0,3)].forEach(txt => {
+          const li = document.createElement('li'); li.textContent = txt; list.appendChild(li);
+        });
+        banner.appendChild(list);
+      }
 
-// ══════════════════════════════════════════════════════════════
-//  RESULTS
-// ══════════════════════════════════════════════════════════════
-function showResults(issues=[], warns=[]) {
-  showSection('results');
-  lockInputs(false);
+      // Download items — DOM only
+      const dlList = document.getElementById('dl-list');
+      while (dlList.firstChild) dlList.removeChild(dlList.firstChild);
+      State.generatedFiles.forEach(f => {
+        const url = URL.createObjectURL(f.blob);
+        State.objectURLs.push(url);
+        const item = document.createElement('div'); item.className='dl-item';
+        const left = document.createElement('div'); left.className='dl-left';
+        const ico  = document.createElement('div'); ico.className='dl-file-icon'; ico.setAttribute('aria-hidden','true'); ico.textContent='📄';
+        const meta = document.createElement('div');
+        const name = document.createElement('div'); name.className='dl-name'; name.textContent=f.label;
+        const file = document.createElement('div'); file.className='dl-filename'; file.textContent=`${f.name} · ${(f.size/1024).toFixed(0)} KB`;
+        meta.append(name,file); left.append(ico,meta);
+        const link = document.createElement('a'); link.className='dl-btn'; link.href=url; link.download=f.name;
+        link.setAttribute('aria-label','Download '+f.label); link.textContent='↓ Download';
+        item.append(left,link);
+        dlList.appendChild(item);
+      });
+    }
 
-  // Meta — safe text
-  const metaEl = document.getElementById('results-meta');
-  metaEl.textContent = `${State.unitLesson ? State.unitLesson+' · ' : ''}${State.dateStr} · ${State.blockLength}-min block`;
-
-  // QA banner — DOM only, no innerHTML for issue strings
-  const banner = document.getElementById('qa-banner');
-  while (banner.firstChild) banner.removeChild(banner.firstChild);
-  if (!issues.length && !warns.length) {
-    banner.className = 'qa-banner pass';
-    const msg = document.createElement('span');
-    msg.textContent = '✓ All QA checks passed — both lesson plans are deployment-ready.';
-    banner.appendChild(msg);
-  } else {
-    banner.className = issues.length ? 'qa-banner fail' : 'qa-banner warn';
-    const icon = document.createElement('span'); icon.textContent = issues.length ? '⚠ ' : '⚠ ';
-    const head = document.createElement('strong');
-    head.textContent = issues.length ? `${issues.length} QA issue(s) — review before distributing:` : `${warns.length} warning(s):`;
-    banner.append(icon, head);
-    const list = document.createElement('ul'); list.className='qa-warn-list';
-    [...issues.slice(0,5), ...warns.slice(0,3)].forEach(txt => {
-      const li = document.createElement('li'); li.textContent = txt; list.appendChild(li);
-    });
-    banner.appendChild(list);
-  }
-
-  // Download items — DOM only
-  const dlList = document.getElementById('dl-list');
-  while (dlList.firstChild) dlList.removeChild(dlList.firstChild);
-  State.generatedFiles.forEach(f => {
-    const url = URL.createObjectURL(f.blob);
-    State.objectURLs.push(url);
-    const item = document.createElement('div'); item.className='dl-item';
-    const left = document.createElement('div'); left.className='dl-left';
-    const ico  = document.createElement('div'); ico.className='dl-file-icon'; ico.setAttribute('aria-hidden','true'); ico.textContent='📄';
-    const meta = document.createElement('div');
-    const name = document.createElement('div'); name.className='dl-name'; name.textContent=f.label;
-    const file = document.createElement('div'); file.className='dl-filename'; file.textContent=`${f.name} · ${(f.size/1024).toFixed(0)} KB`;
-    meta.append(name,file); left.append(ico,meta);
-    const link = document.createElement('a'); link.className='dl-btn'; link.href=url; link.download=f.name;
-    link.setAttribute('aria-label','Download '+f.label); link.textContent='↓ Download';
-    item.append(left,link);
-    dlList.appendChild(item);
-  });
-}
-
-// ══════════════════════════════════════════════════════════════
-//  FULL RESET
-// ══════════════════════════════════════════════════════════════
-function fullReset() {
-  resetState(true);
-  clearFile();
-  lockInputs(false);
-  showSection('input');
-  STAGES.forEach(s=>setStage(s.id,'wait'));
-  setProgress(0);
-  const logEl = document.getElementById('log-inner');
-  if (logEl) { while(logEl.firstChild) logEl.removeChild(logEl.firstChild); }
-  const progFill = document.getElementById('prog-fill');
-  if (progFill) progFill.style.width='0%';
-  const pct = document.getElementById('prog-pct');
-  if (pct) pct.textContent='0%';
-}
-</script>
+    // ══════════════════════════════════════════════════════════════
+    //  FULL RESET
+    // ══════════════════════════════════════════════════════════════
+    function fullReset() {
+      resetState(true);
+      clearFile();
+      lockInputs(false);
+      showSection('input');
+      STAGES.forEach(s=>setStage(s.id,'wait'));
+      setProgress(0);
+      const logEl = document.getElementById('log-inner');
+      if (logEl) { while(logEl.firstChild) logEl.removeChild(logEl.firstChild); }
+      const progFill = document.getElementById('prog-fill');
+      if (progFill) progFill.style.width='0%';
+      const pct = document.getElementById('prog-pct');
+      if (pct) pct.textContent='0%';
+    }
+    </script>
 </body>
 </html>
